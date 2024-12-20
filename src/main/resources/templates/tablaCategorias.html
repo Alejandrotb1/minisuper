@@ -218,3 +218,70 @@
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Proveedores</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:replace="~{fragments/navBar :: navbar}"></div>
+<div id="layoutSidenav">
+    <div th:replace="fragments/sideBar_1 :: sideBar_1"></div>
+
+    <!-- Módulo de Ventas siempre visible -->
+    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSales" aria-expanded="false" aria-controls="collapseSales">
+        <div class="sb-nav-link-icon"><i class="fas fa-fw fa-shopping-cart"></i></div>
+        Módulo de Ventas
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseSales" aria-labelledby="headingSales" data-bs-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="register-sale.html">Registrar Venta</a>
+            <a class="nav-link" href="sales-history.html">Historial de Ventas</a>
+        </nav>
+    </div>
+
+    <!-- Módulo de Inventario solo visible para ADMIN -->
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInventory" aria-expanded="false" aria-controls="collapseInventory">
+            <div class="sb-nav-link-icon"><i class="fas fa-fw fa-box"></i></div>
+            Módulo de Inventario
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseInventory" aria-labelledby="headingInventory" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link" href="producto.html">Agregar Producto</a>
+                <a class="nav-link" href="add-category.html">Agregar Categoría</a>
+                <a class="nav-link" th:href="@{/proveedores}">Proveedores</a>
+                <a class="nav-link" href="inventory-list.html">Lista de Inventario</a>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

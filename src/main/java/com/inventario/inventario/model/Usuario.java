@@ -1,103 +1,87 @@
 package com.inventario.inventario.model;
 
+import com.inventario.inventario.enums.Role;
 import jakarta.persistence.*;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Usuario {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Column(name = "nombre")
-	private String nombre;
+    @Column(name = "nombre")
+    private String nombre;
 
-	@Column(name = "apellido")
-	private String apellido;
+    @Column(name = "apellido")
+    private String apellido;
 
-	private String email;
-	private String password;
-	
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "usuarios_roles",
-			joinColumns = @JoinColumn(name = "usuario_id",referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "rol_id",referencedColumnName = "id")
-			)
-	private Collection<Rol> roles;
+    private String email;
+    private String password;
 
-	public Integer getId() {
-		return id;
-	}
+    // Cambiar la relación con Rol a un conjunto de valores del enum
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "usuarios_roles",
+            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    )
+    @Enumerated(EnumType.STRING) // Guardar los nombres del enum como texto en la tabla
+    private Set<Role> roles = new HashSet<>();
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    // Constructor vacío
+    public Usuario() {
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    // Getters y Setters
+    public Integer getId() {
+        return id;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getApellido() {
-		return apellido;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getApellido() {
+        return apellido;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public Collection<Rol> getRoles() {
-		return roles;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setRoles(Collection<Rol> roles) {
-		this.roles = roles;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Usuario(Integer id, String nombre, String apellido, String email, String password, Collection<Rol> roles) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.email = email;
-		this.password = password;
-		this.roles = roles;
-	}
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
-	public Usuario(String nombre, String apellido, String email, String password, Collection<Rol> roles) {
-		super();
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.email = email;
-		this.password = password;
-		this.roles = roles;
-	}
-
-	public Usuario() {
-		
-	}
-
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

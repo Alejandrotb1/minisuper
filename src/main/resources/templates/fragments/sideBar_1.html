@@ -47,12 +47,12 @@
                 <div class="collapse" id="collapseFinance" aria-labelledby="headingFinance" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="add-expense.html">Registrar Gasto</a>
-                        <a class="nav-link" href="add-income.html">Registrar Ingreso</a>
+                        <a  sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="add-income.html">Registrar Ingreso</a>
                         <a class="nav-link" href="finance-summary.html">Resumen Financiero</a>
                     </nav>
                 </div>
 
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReports" aria-expanded="false" aria-controls="collapseReports">
+                <a  sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReports" aria-expanded="false" aria-controls="collapseReports">
                     <div class="sb-nav-link-icon"><i class="fas fa-fw fa-chart-line"></i></div>
                     Módulo de Reportes
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -65,12 +65,12 @@
                     </nav>
                 </div>
 
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
                     <div class="sb-nav-link-icon"><i class="fas fa-fw fa-users"></i></div>
                     Gestión de Usuarios
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-                <div class="collapse" id="collapseUsers" aria-labelledby="headingUsers" data-bs-parent="#sidenavAccordion">
+                <div   class="collapse" id="collapseUsers" aria-labelledby="headingUsers" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="add-user.html">Agregar Usuario</a>
                         <a class="nav-link" href="user-list.html">Lista de Usuarios</a>

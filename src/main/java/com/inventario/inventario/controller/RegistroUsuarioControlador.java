@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/registro")
+@RequestMapping({"/registro", "/registrar"})
 public class RegistroUsuarioControlador {
 
 	private UsuarioService usuarioService;
@@ -27,7 +27,7 @@ public class RegistroUsuarioControlador {
 
 	@GetMapping
 	public String mostrarFormularioDeRegistro() {
-		return "registro";
+		return "register";
 	}
 	
 	@PostMapping

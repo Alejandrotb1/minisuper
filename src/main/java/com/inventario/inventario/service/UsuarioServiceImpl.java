@@ -1,21 +1,19 @@
 package com.inventario.inventario.service;
 
 import com.inventario.inventario.controller.dto.UsuarioRegistroDTO;
-import com.inventario.inventario.model.Rol;
+import com.inventario.inventario.enums.Role;
 import com.inventario.inventario.model.Usuario;
 import com.inventario.inventario.repository.UsuarioRepository;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,21 +30,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario guardar(UsuarioRegistroDTO registroDTO) {
-		// Verificar si el usuario ya existe
 		if (usuarioRepository.findByEmail(registroDTO.getEmail()) != null) {
 			throw new IllegalArgumentException("El email ya está registrado.");
 		}
 
-		// Crear el nuevo usuario
-		Usuario usuario = new Usuario(
-				registroDTO.getNombre(),
-				registroDTO.getApellido(),
-				registroDTO.getEmail(),
-				passwordEncoder.encode(registroDTO.getPassword()),
-				Arrays.asList(new Rol("ROLE_USER"))
-		);
+		// Ya tenemos los roles como una lista de Role, no es necesario mapearlos
+		Set<Role> roles = new HashSet<>(registroDTO.getRoles());
+
+		Usuario usuario = new Usuario();
+		usuario.setNombre(registroDTO.getNombre());
+		usuario.setApellido(registroDTO.getApellido());
+		usuario.setEmail(registroDTO.getEmail());
+		usuario.setPassword(passwordEncoder.encode(registroDTO.getPassword()));
+		usuario.setRoles(roles);
+
 		return usuarioRepository.save(usuario);
 	}
+
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -54,21 +54,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 		if (usuario == null) {
 			throw new UsernameNotFoundException("Usuario o password inválidos");
 		}
+
 		return new User(
 				usuario.getEmail(),
 				usuario.getPassword(),
-				mapearAutoridadesRoles(usuario.getRoles())
+				usuario.getRoles().stream()
+						.map(role -> new org.springframework.security.core.authority.SimpleGrantedAuthority(role.name()))
+						.collect(Collectors.toSet())
 		);
 	}
 
-	private Collection<? extends GrantedAuthority> mapearAutoridadesRoles(Collection<Rol> roles) {
-		return roles.stream()
-				.map(role -> new SimpleGrantedAuthority(role.getNombre()))
-				.collect(Collectors.toList());
-	}
+	// Método para crear un usuario administrador al iniciar la aplicación
+	@PostConstruct
+	private void crearAdmin() {
+		if (usuarioRepository.findByEmail("admin@inventario.com") == null) {
+			Usuario admin = new Usuario();
+			admin.setNombre("Administrador");
+			admin.setApellido("Principal");
+			admin.setEmail("admin@inventario.com");
+			admin.setPassword(passwordEncoder.encode("admin123"));
+			admin.setRoles(Set.of(Role.ROLE_ADMIN));
 
-	@Override
-	public List<Usuario> listarUsuarios() {
-		return usuarioRepository.findAll();
+			usuarioRepository.save(admin);
+		}
 	}
 }

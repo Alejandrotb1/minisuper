@@ -35,18 +35,38 @@ public class SecurityConfiguration {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
+//	@Bean
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//		http.authorizeHttpRequests(auth -> auth
+//						.requestMatchers("/registro**", "/js/**", "/css/**", "/img/**").permitAll()
+//						.anyRequest().authenticated())
+//				.formLogin(form -> form
+//						.loginPage("/login").permitAll())
+//				.logout(logout -> logout
+//						.invalidateHttpSession(true)
+//						.clearAuthentication(true)
+//						.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//						.logoutSuccessUrl("/login?logout").permitAll());
+//		return http.build();
+//	}
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/registro**", "/js/**", "/css/**", "/img/**").permitAll()
-						.anyRequest().authenticated())
+						.requestMatchers("/registro").not().hasAuthority("ROLE_CAJERO")  // El rol CAJERO no puede acceder a /registro
+						.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")  // Admin tiene acceso completo a /admin/**
+						.requestMatchers("/user/**").hasAuthority("ROLE_USER")   // User puede acceder a /user/**
+						.requestMatchers("/js/**", "/css/**", "/img/**").permitAll()  // Acceso libre a los recursos estáticos
+						.anyRequest().authenticated())  // Otras rutas requieren autenticación
 				.formLogin(form -> form
-						.loginPage("/login").permitAll())
+						.loginPage("/login").permitAll())  // Página de login accesible para todos
 				.logout(logout -> logout
 						.invalidateHttpSession(true)
 						.clearAuthentication(true)
 						.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-						.logoutSuccessUrl("/login?logout").permitAll());
+						.logoutSuccessUrl("/login?logout").permitAll());  // Logout accesible para todos
 		return http.build();
 	}
+
+
 }

@@ -1,5 +1,9 @@
 package com.inventario.inventario.controller.dto;
 
+import com.inventario.inventario.enums.Role;
+
+import java.util.List;
+
 public class UsuarioRegistroDTO {
 
 	private Long id;
@@ -7,6 +11,20 @@ public class UsuarioRegistroDTO {
 	private String apellido;
 	private String email;
 	private String password;
+
+	private List<Role> roles; // Para capturar los roles seleccionados desde el formulario
+
+	public UsuarioRegistroDTO() {
+	}
+
+	public UsuarioRegistroDTO(Long id, String nombre, String apellido, String email, String password, List<Role> roles) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
 
 	public Long getId() {
 		return id;
@@ -48,17 +66,25 @@ public class UsuarioRegistroDTO {
 		this.password = password;
 	}
 
-
-	public UsuarioRegistroDTO(String nombre, String apellido, String email, String password) {
-		super();
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.email = email;
-		this.password = password;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public UsuarioRegistroDTO() {
-
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
+
+
+	//	private boolean isAdmin;
+//
+//	public boolean isAdmin() {
+//		return isAdmin;
+//	}
+//
+//	public void setAdmin(boolean admin) {
+//		isAdmin = admin;
+//	}
+
+
 
 }

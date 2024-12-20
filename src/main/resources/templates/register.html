@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -20,43 +20,95 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
                                     <div class="card-body">
-                                        <form>
+                                        <div th:if=${param.exito}>
+                                            <div class="alert alert-info">Registro exitoso</div>
+                                        </div>
+                                        <form th:action="@{/registro}" method="post" th:object="${usuario}" onsubmit="return validateForm()">
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" />
+                                                        <input th:field="*{nombre}" class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" required autofocus="autofocus"/>
                                                         <label for="inputFirstName">First name</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
+                                                        <input th:field="*{apellido}" class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" required autofocus="autofocus"/>
                                                         <label for="inputLastName">Last name</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                                <input th:field="*{email}" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" required autofocus="autofocus"/>
                                                 <label for="inputEmail">Email address</label>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPassword" type="password" placeholder="Create a password" />
+                                                        <input th:field="*{password}" class="form-control" id="inputPassword" type="password" placeholder="Create a password" required autofocus="autofocus"/>
                                                         <label for="inputPassword">Password</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" />
+                                                        <input th:field="*{password}" class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" required autofocus="autofocus"/>
                                                         <label for="inputPasswordConfirm">Confirm Password</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mt-4 mb-0">
-                                                <div class="d-grid"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="roles">Selecciona los roles:</label>
+                                                        <div>
+                                                            <input type="checkbox" th:field="*{roles}" value="ROLE_ADMIN" id="roleAdmin" onclick="toggleRoles(this)" />
+                                                            <label for="roleAdmin">Admin</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" th:field="*{roles}" value="ROLE_CAJERO" id="roleCajero" checked />
+                                                            <label for="roleCajero">Cajero</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                                             </div>
                                         </form>
+
+                                        <script>
+                                            // Función para validar el formulario
+                                            function validateForm() {
+                                                var password = document.getElementById('inputPassword').value;
+                                                var confirmPassword = document.getElementById('inputPasswordConfirm').value;
+
+                                                // Verificar si las contraseñas coinciden
+                                                if (password !== confirmPassword) {
+                                                    alert("Las contraseñas no coinciden. Por favor, intenta nuevamente.");
+                                                    return false;  // Evitar que se envíe el formulario
+                                                }
+
+                                                // Verificar si al menos un rol está seleccionado
+                                                var rolesSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                                                if (rolesSelected === 0) {
+                                                    alert("Debes seleccionar al menos un rol.");
+                                                    return false;  // Evitar que se envíe el formulario
+                                                }
+
+                                                // Si todas las validaciones son exitosas, se puede enviar el formulario
+                                                return true;
+                                            }
+
+                                            // Función para controlar el comportamiento de los roles
+                                            function toggleRoles(adminCheckbox) {
+                                                const cajeroCheckbox = document.getElementById("roleCajero");
+                                                if (adminCheckbox.checked) {
+                                                    cajeroCheckbox.checked = true;
+                                                    cajeroCheckbox.disabled = true; // Deshabilitar "Cajero" si "Admin" está seleccionado
+                                                } else {
+                                                    cajeroCheckbox.disabled = false;
+                                                }
+                                            }
+                                        </script>
+
                                     </div>
                                     <div class="card-footer text-center py-3">
                                         <div class="small"><a href="login.html">Have an account? Go to login</a></div>
