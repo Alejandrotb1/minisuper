@@ -38,8 +38,19 @@ public class ProveedorController {
 */
 @GetMapping("/proveedores")
 public String getProveedores(Model model) {
+
     List<Proveedor> proveedorList = proveedorRepository.findAll();
-    model.addAttribute("proveedor", new Proveedor());
+
+
+
+    if (model.containsAttribute("proveedor")) {
+        Proveedor proveedor = (Proveedor) model.asMap().get("proveedor");
+        System.out.println("Proveedor en GET: " + proveedor.getNombre());  // Verifica que el proveedor tiene datos
+        model.addAttribute("proveedor", proveedor);
+    }
+    else{
+        model.addAttribute("proveedor", new Proveedor());
+    }
     model.addAttribute("proveedorList", proveedorList);
     return "proveedores";
 }
@@ -71,7 +82,13 @@ public String getProveedores(Model model) {
     @PostMapping("proveedores/guardar")
     public String agregarProveedor(@ModelAttribute("proveedor") Proveedor proveedor, RedirectAttributes redirectAttributes) {
         // Llamar al servicio para guardar el proveedor
+
+        System.out.println("Proveedor recibido: " + proveedor.getNombre());
+
+        redirectAttributes.addFlashAttribute("proveedor", proveedor);
+
         return proveedorService.guardarProveedor(proveedor, redirectAttributes);
+
     }
 
 }

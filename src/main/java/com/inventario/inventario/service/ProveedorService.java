@@ -19,6 +19,11 @@ public class ProveedorService {
             redirectAttributes.addFlashAttribute("proveedor", proveedor); // Agregar los datos del proveedor
             return "redirect:/proveedores";
         }
+        if (proveedor.getNombre() == null || proveedor.getNombre().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorNoNombre", "El nombre es obligatorio.");
+            redirectAttributes.addFlashAttribute("proveedor", proveedor); // Agregar los datos del proveedor
+            return "redirect:/proveedores";
+        }
 
         // Validar si el email ya existe
         if (proveedorRepository.existsByEmail(proveedor.getEmail())) {

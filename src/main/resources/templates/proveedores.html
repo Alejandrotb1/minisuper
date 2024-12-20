@@ -38,11 +38,14 @@
                                     <div class="col-md-6">
 
                                         <label for="nombreProveedor">Nombre proveedor</label>
-                                        <input type="text" th:field="*{nombre}" id="nombreProveedor" name="nombre"
-                                               class="form-control" placeholder="Ingrese el nombre del proveedor" required>
+                                        <input type="text" th:field="*{nombre}" id="nombreProveedor" name="nombre" value="d"
+                                               class="form-control" placeholder="Ingrese el nombre del proveedor" >
                                         <!-- Mostrar mensaje de error si existe -->
                                         <div th:if="${errorNombre}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorNombre}"></p>
+                                        </div>
+                                        <div th:if="${errorNoNombre}" class="alert alert-danger" role="alert">
+                                            <p th:text="${errorNoNombre}"></p>
                                         </div>
 
 
@@ -51,14 +54,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email">Email</label>
-                                        <input type="text"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" required>
+                                        <input type="email"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" >
 
                                         <div th:if="${errorEmail}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorEmail}"></p>
                                         </div>
-                                        <div th:if="${errorNoEmail}" class="alert alert-danger" role="alert">
-                                            <p th:text="${errorNoEmail}"></p>
-                                        </div>
+
                                         <div th:if="${errorNoArroba}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorNoArroba}"></p>
                                         </div>
@@ -73,7 +74,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <label for="direccion">direccion</label>
-                                        <input type="text"  th:field="*{direccion}" id="direccion" name="direccion" class="form-control" placeholder="email" required>
+                                        <input type="text"  th:field="*{direccion}" id="direccion" name="direccion" class="form-control" placeholder="direccion" >
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-success">Guardar Proveedor</button>
@@ -119,7 +120,7 @@
                                             <td th:text="${proveedor.email}"></td>
                                             <td th:text="${proveedor.telefono}"></td>
                                             <td th:text="${proveedor.direccion}"></td>
-                                            <td>$170,750</td>
+                                            <td >$170,750</td>
                                         </tr>
 
 
@@ -174,5 +175,9 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
+
+
+
+
     </body>
 </html>
