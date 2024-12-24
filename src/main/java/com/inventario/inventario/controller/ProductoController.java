@@ -1,11 +1,15 @@
-package com.inventario.inventario.producto;
+package com.inventario.inventario.controller;
 
-import com.inventario.inventario.categoria.CategoriaRepository;
+import com.inventario.inventario.model.Producto;
+import com.inventario.inventario.repository.CategoriaRepository;
+import com.inventario.inventario.repository.ProductoRepository;
+import com.inventario.inventario.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -13,11 +17,11 @@ import java.util.List;
 @Controller
 public class ProductoController {
     @Autowired
-    private  ProductoService productoService;
+    private ProductoService productoService;
     @Autowired
     private  CategoriaRepository categoriaRepository;
     @Autowired
-    private  ProductoRepository productoRepository;
+    private ProductoRepository productoRepository;
 
 /*
 //sin autowired, constructor
@@ -40,19 +44,34 @@ public ProductoController(ProductoService productoService, CategoriaRepository c
     public String nuevoProducto(Model model) {
         // Crear un nuevo objeto Producto vacío
         List<Producto> listaProductos = productoRepository.findAll();
-        model.addAttribute("listaProductos", new Producto());
-        model.addAttribute("listaProductosMostrar", listaProductos);
+        model.addAttribute("producto", new Producto());
+        model.addAttribute("productos", listaProductos);
         // Agregar las categorías disponibles al modelo
-        model.addAttribute("listaCategorias", categoriaRepository.findAll());
-        return "tablaProductos"; // Vista del formulario de creación
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        return "productos"; // Vista del formulario de creación
     }
 
 
     @PostMapping("/productos/guardar")
-    public String guardarProducto(@ModelAttribute("listaProductos") Producto producto) {
+    public String guardarProducto(@ModelAttribute("producto") Producto producto) {
         // Guardar el producto utilizando el servicio
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+producto);
         productoService.guardarProducto(producto);
         // Redirigir a la lista de productos después de guardar el nuevo producto
+
+        System.out.println(producto.toString());
         return "redirect:/productos";
+    }
+    @GetMapping("/productos/editar/{id}")
+    public String editarProducto(@PathVariable("id") Integer id, Model model){
+        Producto producto = productoRepository.findById(id).get();
+        model.addAttribute("producto", producto);
+
+
+        List<Producto> listaProductos = productoRepository.findAll();
+
+        model.addAttribute("productos", listaProductos);
+        return "productos";
+
     }
 }

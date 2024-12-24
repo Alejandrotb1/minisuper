@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UsuarioRegistroDTO {
 
-	private Long id;
+	private Integer id;
 	private String nombre;
 	private String apellido;
 	private String email;
@@ -17,7 +17,7 @@ public class UsuarioRegistroDTO {
 	public UsuarioRegistroDTO() {
 	}
 
-	public UsuarioRegistroDTO(Long id, String nombre, String apellido, String email, String password, List<Role> roles) {
+	public UsuarioRegistroDTO(Integer id, String nombre, String apellido, String email, String password, List<Role> roles) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -26,11 +26,11 @@ public class UsuarioRegistroDTO {
 		this.roles = roles;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -73,7 +73,6 @@ public class UsuarioRegistroDTO {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-
 
 	//	private boolean isAdmin;
 //

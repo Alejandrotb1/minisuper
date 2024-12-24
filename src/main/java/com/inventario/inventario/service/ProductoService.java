@@ -1,7 +1,10 @@
-package com.inventario.inventario.producto;
+package com.inventario.inventario.service;
 
-import com.inventario.inventario.categoria.Categoria;
-import com.inventario.inventario.categoria.CategoriaRepository;
+
+import com.inventario.inventario.model.Categoria;
+import com.inventario.inventario.model.Producto;
+import com.inventario.inventario.repository.CategoriaRepository;
+import com.inventario.inventario.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,11 +26,26 @@ public class ProductoService {
     }
 
     public void guardarProducto(Producto producto) {
+
+
+
+        System.out.println("PRE GUARDARPRODUCTO  "+producto);
         // Si el precio de venta no ha sido asignado, lo calculamos como un 30% más del precio de compra
         if (producto.getPrecioVenta() == null || producto.getPrecioVenta().compareTo(producto.getPrecioCompra().multiply(new BigDecimal("1.30"))) < 0) {
             producto.setPrecioVenta(producto.getPrecioCompra().multiply(new BigDecimal("1.30")));
         }
 
+
+//        Producto productoExistente = productoRepository.findById(producto.getId()).orElse(null);
+
+        if (producto.getId() != null) {
+            producto.setStock(producto.getStock() + producto.getCantidad());
+            System.out.println("!NULL GUARDARPRODUCTO EXISTENTE  " + producto);
+        } else {
+
+            producto.setStock(producto.getCantidad());
+            System.out.println("GUARDARPRODUCTO NUEVO  " + producto);
+        }
 
         productoRepository.save(producto);
     }

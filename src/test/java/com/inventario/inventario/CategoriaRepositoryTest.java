@@ -2,7 +2,7 @@
 package com.inventario.inventario;
 
 import com.inventario.inventario.categoria.Categoria;
-import com.inventario.inventario.categoria.CategoriaRepository;
+import com.inventario.inventario.repository.CategoriaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

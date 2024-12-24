@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Proveedores</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:replace="~{fragments/navBar :: navbar}"></div>
+<div id="layoutSidenav">
+    <div th:replace="fragments/sideBar_1 :: sideBar_1"></div>
+
+
+
+    <div id="layoutSidenav_content">
+        <main>
+
+
+
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Proveedores</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">pr</li>
+                </ol>
+                <button type="button" class="btn btn-primary" onclick="abrirFormularioRegistro()">Agregar usuario</button>
+
+
+
+                <!-- Formulario emergente (oculto inicialmente) -->
+                <div id="formularioRegistro" style="display: none; margin-top: 20px;">
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                            <div class="card-body">
+
+                                <form th:action="@{/registro}" method="post" th:object="${usuario}" onsubmit="return validateForm()">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3 mb-md-0">
+                                                <input th:field="*{nombre}" class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" required autofocus="autofocus"/>
+                                                <label for="inputFirstName">First name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input th:field="*{apellido}" class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" required autofocus="autofocus"/>
+                                                <label for="inputLastName">Last name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input th:field="*{email}" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" required autofocus="autofocus"/>
+                                        <label for="inputEmail">Email address</label>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3 mb-md-0">
+                                                <input th:field="*{password}" class="form-control" id="inputPassword" type="password" placeholder="Create a password" required autofocus="autofocus"/>
+                                                <label for="inputPassword">Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3 mb-md-0">
+                                                <input th:field="*{password}" class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" required autofocus="autofocus"/>
+                                                <label for="inputPasswordConfirm">Confirm Password</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 mb-0">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="roles">Selecciona los roles:</label>
+                                                <div>
+                                                    <input type="checkbox" th:field="*{roles}" value="ROLE_ADMIN" id="roleAdmin" onclick="toggleRoles(this)" />
+                                                    <label for="roleAdmin">Admin</label>
+                                                </div>
+                                                <div>
+                                                    <input type="checkbox" th:field="*{roles}" value="ROLE_CAJERO" id="roleCajero" checked />
+                                                    <label for="roleCajero">Cajero</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+
+                                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioRegistro()">Cancelar</button>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Formulario emergente (oculto inicialmente) -->
+                <div th:if="${param.exito}">
+                    <div class="alert alert-info">Registro exitoso</div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Lista de usuarios
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Telefono</th>
+
+
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>id</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Telefono</th>
+
+
+                            </tr>
+                            </tfoot>
+                            <tbody>
+
+
+                            <tr th:each="usuario : ${usuarioRegistroDTOList}">
+                                <td th:text="${usuario.nombre}"></td>
+                                <td th:text="${usuario.apellido}"></td>
+                                <td th:text="${usuario.email}"></td>
+                                <td>
+                                    <span th:each="role : ${usuario.roles}" th:text="${role.name()}"></span>
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script>
+                // Función para abrir el formulario de registro
+                function abrirFormularioRegistro() {
+                    document.getElementById('formularioRegistro').style.display = 'block';
+                }
+
+                // Función para cerrar el formulario de registro si no hay errores
+                function cerrarFormularioRegistro() {
+                    document.getElementById('formularioRegistro').style.display = 'none';
+                }
+
+                // Validación del formulario de registro
+                function validateForm() {
+                    var password = document.getElementById('inputPassword').value;
+                    var confirmPassword = document.getElementById('inputPasswordConfirm').value;
+
+                    // Verificar si las contraseñas coinciden
+                    if (password !== confirmPassword) {
+                        alert("Las contraseñas no coinciden. Por favor, intenta nuevamente.");
+                        return false;  // Evitar que se envíe el formulario
+                    }
+
+                    // Verificar si al menos un rol está seleccionado
+                    var rolesSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                    if (rolesSelected === 0) {
+                        alert("Debes seleccionar al menos un rol.");
+                        return false;  // Evitar que se envíe el formulario
+                    }
+
+                    // Si todas las validaciones son exitosas, se puede enviar el formulario
+                    return true;
+                }
+
+                // Función para controlar el comportamiento de los roles
+                function toggleRoles(adminCheckbox) {
+                    const cajeroCheckbox = document.getElementById("roleCajero");
+                    if (adminCheckbox.checked) {
+                        cajeroCheckbox.checked = true;
+                        cajeroCheckbox.disabled = true; // Deshabilitar "Cajero" si "Admin" está seleccionado
+                    } else {
+                        cajeroCheckbox.disabled = false;
+                    }
+                }
+            </script>
+
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
+
+
+
+
+</body>
+</html>

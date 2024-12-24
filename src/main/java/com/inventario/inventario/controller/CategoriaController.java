@@ -1,6 +1,8 @@
-package com.inventario.inventario.categoria;
+package com.inventario.inventario.controller;
 
 
+import com.inventario.inventario.model.Categoria;
+import com.inventario.inventario.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,7 @@ public class CategoriaController {
             Categoria nuevaCategoria = new Categoria();
             nuevaCategoria.setNombre(nombre);
             categoriaRepository.save(nuevaCategoria);
+            System.out.println("@@@@@@"+nuevaCategoria);
             return "redirect:/categorias"; // Redirige para recargar la tabla
         } catch (DataIntegrityViolationException e) {
             redirectAttributes.addFlashAttribute("error", "La categoría "+nombre+" ya existe.");

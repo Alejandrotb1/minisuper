@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 						.collect(Collectors.toSet())
 		);
 	}
+
+
+
+	@Override
+	public List<Usuario> obtenerTodosLosUsuarios() {
+		return usuarioRepository.findAll(); // Devuelve todos los usuarios
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// Método para crear un usuario administrador al iniciar la aplicación
 	@PostConstruct
