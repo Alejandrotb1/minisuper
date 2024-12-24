@@ -48,18 +48,15 @@ public ProductoController(ProductoService productoService, CategoriaRepository c
         model.addAttribute("productos", listaProductos);
         // Agregar las categorías disponibles al modelo
         model.addAttribute("categorias", categoriaRepository.findAll());
-        return "productos"; // Vista del formulario de creación
+        return "productos";
     }
 
 
     @PostMapping("/productos/guardar")
     public String guardarProducto(@ModelAttribute("producto") Producto producto) {
-        // Guardar el producto utilizando el servicio
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+producto);
-        productoService.guardarProducto(producto);
-        // Redirigir a la lista de productos después de guardar el nuevo producto
 
-        System.out.println(producto.toString());
+        productoService.guardarProducto(producto);
+
         return "redirect:/productos";
     }
     @GetMapping("/productos/editar/{id}")
@@ -71,7 +68,15 @@ public ProductoController(ProductoService productoService, CategoriaRepository c
         List<Producto> listaProductos = productoRepository.findAll();
 
         model.addAttribute("productos", listaProductos);
+        model.addAttribute("categorias", categoriaRepository.findAll());
         return "productos";
 
     }
+
+    @GetMapping
+    public String eliminarProducto(@PathVariable("id") Integer id, Model model){
+        productoRepository.deleteById(id);
+        return "productos";
+    }
+
 }

@@ -48,6 +48,7 @@
                 <div id="formularioProducto" style="display: none; margin-top: 20px;">
                     <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
                         <div class="form-group">
+                            <input type="hidden" th:field="*{id}">
                             <label for="codigoProducto">Código Producto</label>
                             <input type="text" id="codigoProducto" th:field="*{codigo}" class="form-control" placeholder="Ingrese el código del producto (opcional)">
 
@@ -146,7 +147,7 @@
                                     <a th:href="@{'/productos/editar'+'/'+ ${producto.id}}" class="btn btn-warning btn-sm" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm" title="Borrar">
+                                    <a th:href="@{'/productos/eliminar'+'/'+ ${producto.id}}" class="btn btn-danger btn-sm" title="Borrar">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>

@@ -29,7 +29,6 @@ public class ProductoService {
 
 
 
-        System.out.println("PRE GUARDARPRODUCTO  "+producto);
         // Si el precio de venta no ha sido asignado, lo calculamos como un 30% más del precio de compra
         if (producto.getPrecioVenta() == null || producto.getPrecioVenta().compareTo(producto.getPrecioCompra().multiply(new BigDecimal("1.30"))) < 0) {
             producto.setPrecioVenta(producto.getPrecioCompra().multiply(new BigDecimal("1.30")));
@@ -40,11 +39,9 @@ public class ProductoService {
 
         if (producto.getId() != null) {
             producto.setStock(producto.getStock() + producto.getCantidad());
-            System.out.println("!NULL GUARDARPRODUCTO EXISTENTE  " + producto);
         } else {
 
             producto.setStock(producto.getCantidad());
-            System.out.println("GUARDARPRODUCTO NUEVO  " + producto);
         }
 
         productoRepository.save(producto);
