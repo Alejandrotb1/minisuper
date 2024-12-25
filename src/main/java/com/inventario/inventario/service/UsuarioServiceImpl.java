@@ -4,6 +4,7 @@ import com.inventario.inventario.controller.dto.UsuarioRegistroDTO;
 import com.inventario.inventario.enums.Role;
 import com.inventario.inventario.model.Usuario;
 import com.inventario.inventario.repository.UsuarioRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,7 +36,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new IllegalArgumentException("El email ya está registrado.");
 		}
 
-		// Ya tenemos los roles como una lista de Role, no es necesario mapearlos
+
 		Set<Role> roles = new HashSet<>(registroDTO.getRoles());
 
 		Usuario usuario = new Usuario();
@@ -69,11 +70,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public List<Usuario> obtenerTodosLosUsuarios() {
-		return usuarioRepository.findAll(); // Devuelve todos los usuarios
+		return usuarioRepository.findAll();
 	}
 
+	public Usuario obtenerUsuarioAutenticado() {
+		// Obtener el nombre de usuario desde el contexto de seguridad
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
 
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		} else {
+			throw new IllegalStateException("No se ha encontrado un usuario autenticado.");
+		}
 
+		// Buscar el usuario en la base de datos
+		Usuario usuario = usuarioRepository.findByEmail(username);
+
+		if (usuario == null) {
+			throw new UsernameNotFoundException("Usuario no encontrado con email: " + username);
+		}
+
+		return usuario;
+	}
 
 
 
@@ -88,11 +107,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	// Método para crear un usuario administrador al iniciar la aplicación
 	@PostConstruct
 	private void crearAdmin() {
-		if (usuarioRepository.findByEmail("admin@inventario.com") == null) {
+		if (usuarioRepository.findByEmail("admin@admin.com") == null) {
 			Usuario admin = new Usuario();
 			admin.setNombre("Administrador");
 			admin.setApellido("Principal");
-			admin.setEmail("admin@inventario.com");
+			admin.setEmail("admin@admin.com");
 			admin.setPassword(passwordEncoder.encode("admin123"));
 			admin.setRoles(Set.of(Role.ROLE_ADMIN));
 

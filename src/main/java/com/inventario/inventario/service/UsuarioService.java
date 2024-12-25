@@ -16,7 +16,7 @@ public interface UsuarioService extends UserDetailsService{
 
 
 
-	// Método para obtener todos los usuarios
+
 	List<Usuario> obtenerTodosLosUsuarios();
 
 	// Método para cargar un usuario por su nombre de usuario (usado para autenticación)

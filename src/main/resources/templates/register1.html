@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Proveedores</title>
+    <title>Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,7 +24,7 @@
 
 
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Proveedores</h1>
+                <h1 class="mt-4">Usuarios</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">pr</li>
                 </ol>
@@ -36,7 +36,7 @@
                 <div id="formularioRegistro" style="display: none; margin-top: 20px;">
                     <div class="col-lg-7">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Agregar Usuario</h3></div>
                             <div class="card-body">
 
                                 <form th:action="@{/registro}" method="post" th:object="${usuario}" onsubmit="return validateForm()">
@@ -65,12 +65,12 @@
                                                 <label for="inputPassword">Password</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <input th:field="*{password}" class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" required autofocus="autofocus"/>
-                                                <label for="inputPasswordConfirm">Confirm Password</label>
-                                            </div>
-                                        </div>
+<!--                                        <div class="col-md-6">-->
+<!--                                            <div class="form-floating mb-3 mb-md-0">-->
+<!--                                                <input th:field="*{password}" class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" required autofocus="autofocus"/>-->
+<!--                                                <label for="inputPasswordConfirm">Confirm Password</label>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
                                     </div>
                                     <div class="mt-4 mb-0">
                                         <div class="row mb-3">
@@ -115,20 +115,19 @@
                         <table id="datatablesSimple">
                             <thead>
                             <tr>
-                                <th>id</th>
                                 <th>Nombre</th>
+                                <th>Apellido</th>
                                 <th>Email</th>
-                                <th>Telefono</th>
-
+                                <th>Rol</th>
 
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th>id</th>
                                 <th>Nombre</th>
+                                <th>Apellido</th>
                                 <th>Email</th>
-                                <th>Telefono</th>
+                                <th>Rol</th>
 
 
                             </tr>

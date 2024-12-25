@@ -7,11 +7,11 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // Herencia JOINED para relaciones claras
-@Table(name = "transacciones")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Usar SINGLE_TABLE para la herencia
+@DiscriminatorColumn(name = "tipo_transaccion", discriminatorType = DiscriminatorType.STRING) // Columna discriminadora
+@Table(name = "transacciones") // Tabla única para todos los tipos de transacciones
 public class Transaccion {
 
     @Id
@@ -28,6 +28,8 @@ public class Transaccion {
     @Column(nullable = false)
     private LocalDate fecha;
 
+    @Column(length = 80)
+    private String concepto;
     @Column(length = 500)
     private String detalle;
 
@@ -43,3 +45,5 @@ public class Transaccion {
         this.fecha = LocalDate.now();
     }
 }
+
+

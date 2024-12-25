@@ -53,18 +53,19 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/registro").not().hasAuthority("ROLE_CAJERO")  // El rol CAJERO no puede acceder a /registro
-						.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")  // Admin tiene acceso completo a /admin/**
-						.requestMatchers("/user/**").hasAuthority("ROLE_USER")   // User puede acceder a /user/**
-						.requestMatchers("/js/**", "/css/**", "/img/**").permitAll()  // Acceso libre a los recursos estáticos
-						.anyRequest().authenticated())  // Otras rutas requieren autenticación
+						.requestMatchers("/registro").not().hasAuthority("ROLE_CAJERO")
+						.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+						.requestMatchers("/user/**").hasAuthority("ROLE_USER")
+						.requestMatchers("/js/**", "/css/**", "/img/**").permitAll()
+						.anyRequest().authenticated())
 				.formLogin(form -> form
-						.loginPage("/login").permitAll())  // Página de login accesible para todos
+						.loginPage("/login").permitAll()
+						.defaultSuccessUrl("/index", true)) // Redirección controlada
 				.logout(logout -> logout
 						.invalidateHttpSession(true)
 						.clearAuthentication(true)
 						.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-						.logoutSuccessUrl("/login?logout").permitAll());  // Logout accesible para todos
+						.logoutSuccessUrl("/login?logout").permitAll());
 		return http.build();
 	}
 

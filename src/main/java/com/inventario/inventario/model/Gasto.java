@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "gastos")
+@DiscriminatorValue("GASTO")  // Valor específico para la subclase
 public class Gasto extends Transaccion {
 
     @OneToOne(mappedBy = "gasto", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Compra compra; // Relación opcional con Compra
+    private Compra compra;  // Relación con Compra
 }
 

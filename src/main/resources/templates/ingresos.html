@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Ingresos</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:replace="~{fragments/navBar :: navbar}"></div>
+<div id="layoutSidenav">
+    <div th:replace="fragments/sideBar_1 :: sideBar_1"></div>
+
+
+
+    <div id="layoutSidenav_content">
+        <main>
+
+
+
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Ingresos</h1>
+
+
+                <button th:if="${ingreso.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()">Agregar Ingreso</button>
+                <button th:unless="${ingreso.id == null}"  type="button" class="btn btn-primary" onclick="window.location.href='/ingresos?abrirFormulario=true';">Agregar Ingreso</button>
+                <button  th:if="${ingreso.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()" disabled>Editar Ingreso</button>
+                <button  th:unless="${ingreso.id == null}"  type="button" class="btn btn-primary" onclick="abrirFormulario()">Editar Ingreso</button>
+
+
+
+
+
+                <!-- Formulario emergente (oculto inicialmente) -->
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <p th:text="${error}"></p>
+                </div>
+
+
+
+                <div id="formularioIngreso" style="display: none; margin-top: 20px;">
+                    <form th:action="@{/ingresos/guardar}" th:object="${ingreso}" method="post">
+                        <div class="form-group">
+                            <input type="hidden" th:field="*{id}">
+                            <label for="concepto">Concepto</label>
+                            <input type="text" id="concepto" th:field="*{concepto}" class="form-control" placeholder="Ingrese el concepto(opcional)">
+
+                            <label for="monto">Monto</label>
+                            <input type="number" id="monto" th:field="*{monto}" class="form-control" placeholder="Ingrese el precio de compra" step="0.01" required>
+
+
+                            <label for="metodo-pago">Cantidad</label>
+                            <input type="number" id="metodo-pago" th:field="*{metodoPago}" class="form-control" placeholder="Ingrese la cantidad disponible" required>
+
+
+
+                            <label for="detalle">Detalle</label>
+                            <textarea id="detalle" th:field="*{detalle}" class="form-control" rows="3" placeholder="Ingrese una breve descripción del ingreso"></textarea>
+
+
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
+                    </form>
+                </div>
+
+
+                <!-- Formulario emergente (oculto inicialmente) -->
+
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Lista de ingresos
+                    </div>
+                    <!--<div th:if="${error}" class="alert alert-danger" role="alert">
+                        <p th:text="${error}"></p>
+                    </div>-->
+
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>tipo transaccion</th>
+                                <th>concepto</th>
+                                <th>metodo pago</th>
+                                <th>monto</th>
+                                <th>detalle</th>
+                                <th>Usuario</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>tipo transaccion</th>
+                                <th>concepto</th>
+                                <th>metodo pago</th>
+                                <th>monto</th>
+                                <th>detalle</th>
+                                <th>Usuario</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="ingreso : ${ingresos}">
+                                <td th:text="${ingreso.tipo}"></td>
+                                <td th:text="${ingreso.concepto}"></td>
+                                <td th:text="${ingreso.metodoPago}"></td>
+                                <td th:text="${ingreso.monto}"></td>
+                                <td th:text="${ingreso.detalle}"></td>
+                                <td th:text="${ingreso.usuario.email}"></td>
+                                <td th:text="${ingreso.fecha}"></td>
+<!--                                <td th:text="${ingreso.categoria.nombre}"></td>-->
+
+                                <td>
+                                    <a th:href="@{'/ingresos/' + ${ingreso.id}}" class="btn btn-primary btn-sm" title="Ver detalles">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+<!--                                    <a th:href="@{'/ingresos/editar'+'/'+ ${ingreso.id}}" class="btn btn-warning btn-sm" title="Editar">-->
+<!--                                        <i class="bi bi-pencil"></i>-->
+<!--                                    </a>-->
+                                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/ingresos/eliminar'+'/'+ ${ingreso.id}}" class="btn btn-danger btn-sm" title="Borrar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+
+                                <!--                                <td>-->
+<!--                                    <button class="btn btn-primary btn-sm" title="Ver detalles">-->
+<!--                                        <i class="bi bi-eye"></i>-->
+<!--                                    </button>-->
+<!--                                    <button class="btn btn-warning btn-sm" title="Editar">-->
+<!--                                        <i class="bi bi-pencil"></i>-->
+<!--                                    </button>-->
+<!--                                    <button class="btn btn-danger btn-sm" title="Borrar">-->
+<!--                                        <i class="bi bi-trash"></i>-->
+<!--                                    </button>-->
+<!--                                </td>-->
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script>
+
+
+                function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Detectar el parámetro `abrirFormulario` y ejecutar la función
+    document.addEventListener("DOMContentLoaded", function () {
+        if (getQueryParam('abrirFormulario') === 'true') {
+            abrirFormulario();
+        }
+    });
+
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    const productoId = [[${ingreso.id != null ? ingreso.id : 'null'}]];
+                    if (productoId !== null) {
+                        abrirFormulario();
+                    }
+                });
+
+                function abrirFormulario() {
+                    document.getElementById('formularioIngreso').style.display = 'block';
+                }
+
+                function cerrarFormulario() {
+                    document.getElementById('formularioIngreso').style.display = 'none';
+                }
+            </script>
+
+
+
+
+            <script>
+
+
+            </script>
+
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Web</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/assets/demo/chart-area-demo.js"></script>
+<script src="/assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/js/datatables-simple-demo.js"></script>
+
+
+
+
+</body>
+</html>

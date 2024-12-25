@@ -1,5 +1,6 @@
 package com.inventario.inventario.enums;
 
+
 public enum TipoTransaccion {
     INGRESO("Transacción de ingreso"),
     GASTO("Transacción de gasto");
