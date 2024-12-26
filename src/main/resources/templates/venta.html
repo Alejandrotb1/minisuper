@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:replace="~{fragments/navBar :: navbar}"></div>
+<div id="layoutSidenav">
+    <div th:replace="fragments/sideBar_1 :: sideBar_1"></div>
+
+
+
+    <div id="layoutSidenav_content">
+        <main>
+
+
+
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Productos</h1>
+
+
+
+                <div class="container mt-5">
+                    <!-- Formulario de Registro de Venta -->
+                    <div class="row">
+                        <!-- Columna 1 -->
+                        <div class="col-md-3">
+                            <!-- Código de Producto -->
+                            <div class="mb-3">
+                                <label for="productCode" class="form-label">Código de Producto</label>
+                                <input type="text" class="form-control" id="productCode" placeholder="Código de Producto" disabled>
+                            </div>
+
+                            <!-- Tipo de Producto -->
+                            <div class="mb-3">
+                                <label for="productType" class="form-label">Tipo de Producto</label>
+                                <input type="text" class="form-control" id="productType" placeholder="Tipo de Producto" disabled>
+                            </div>
+
+                            <!-- Precio -->
+                            <div class="mb-3">
+                                <label for="productPrice" class="form-label">Precio</label>
+                                <input type="text" class="form-control" id="productPrice" placeholder="Precio del Producto" disabled>
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="mb-3">
+                                <label for="productStock" class="form-label">Stock</label>
+                                <input type="text" class="form-control" id="productStock" placeholder="Stock del Producto" disabled>
+                            </div>
+
+                            <!-- Cantidad y Método de Pago -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label">Cantidad</label><input type="checkbox" id="enableQuantity" class="ms-2" onclick="toggleQuantityInput()">
+                                        <input type="number" class="form-control" id="quantity" value="1" disabled>
+
+                                    </div>
+                                </div>
+
+                                <script>
+                                    // Función que habilita o deshabilita el campo de cantidad dependiendo del checkbox
+                                    function toggleQuantityInput() {
+                                        const enableQuantity = document.getElementById("enableQuantity").checked;
+                                        const quantityInput = document.getElementById("quantity");
+                                        quantityInput.disabled = !enableQuantity;
+                                    }
+                                </script>
+
+
+                                <!-- Método de Pago -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="paymentMethod" class="form-label">Método de Pago</label>
+                                        <select class="form-select" id="paymentMethod">
+                                            <option value="cash">Efectivo</option>
+                                            <option value="card">Tarjeta</option>
+                                            <option value="transfer">Transferencia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <!-- Columna 2 (Buscar Producto y Selección) -->
+                        <div class="col-md-6">
+                            <div class="container-fluid px-4">
+
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table me-1"></i>
+                                        DataTable Example
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                            <tr>
+                                                <th>producto</th>
+                                                <th>Precio</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+
+                                                <th>producto</th>
+                                                <th>Precio</th>
+                                            </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            <tr th:each="producto : ${productos}">
+<!--                                                <input type="hidden" th:field="*{id}">-->
+                                                <td th:text="${producto.nombre}"></td>
+                                                <td th:text="${producto.precioVenta}"></td>
+
+                                            </tr>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--                    precio sugerido&ndash;&gt;-->
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Web</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/assets/demo/chart-area-demo.js"></script>
+<script src="/assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/js/datatables-simple-demo.js"></script>
+
+
+
+
+</body>
+</html>
