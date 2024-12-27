@@ -2,7 +2,8 @@ package com.inventario.inventario.controller;
 
 
 import com.inventario.inventario.model.Categoria;
-import com.inventario.inventario.repository.CategoriaRepository;
+
+import com.inventario.inventario.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -14,19 +15,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+
 @Controller
 public class CategoriaController {
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private CategoriaService categoriaService;
 
     @GetMapping("/categorias")
-    public String listarCategorias(Model model){
-        List<Categoria> listaCategorias = categoriaRepository.findAll();
+    public String listarCategorias(Model model) {
+        List<Categoria> listaCategorias = categoriaService.listarCategorias();
         model.addAttribute("listaCategorias", listaCategorias);
         return "tablaCategorias";
     }
-
 
     @PostMapping("/categorias/guardar")
     public String agregarCategoria(
@@ -34,18 +35,12 @@ public class CategoriaController {
             RedirectAttributes redirectAttributes) {
 
         try {
-            Categoria nuevaCategoria = new Categoria();
-            nuevaCategoria.setNombre(nombre);
-            categoriaRepository.save(nuevaCategoria);
-            System.out.println("@@@@@@"+nuevaCategoria);
+            categoriaService.guardarCategoria(nombre);
             return "redirect:/categorias"; // Redirige para recargar la tabla
         } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("error", "La categoría "+nombre+" ya existe.");
+            redirectAttributes.addFlashAttribute("error", "La categoría " + nombre + " ya existe.");
             redirectAttributes.addFlashAttribute("nombreDuplicado", nombre);
             return "redirect:/categorias"; // Redirige a la tabla para mostrar el error
         }
     }
-
-
-
 }

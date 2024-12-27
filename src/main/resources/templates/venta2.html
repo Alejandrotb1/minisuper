@@ -25,10 +25,10 @@
 
 
         <main>
-            <div class="container mt-2">
+            <div class="container mt-5">
                 <div class="row">
                     <!-- Columna 1 -->
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <!-- Código de Producto -->
                         <div class="mb-3">
                             <label for="productCode" class="form-label">Código de Producto</label>
@@ -100,23 +100,25 @@
 
                         <!-- Contenedor de la tabla -->
                         <div class="container-fluid px-4" id="tableContainer">
-                            <div class="card mb-6">
+                            <div class="card mb-4">
                                 <div class="card-body">
                                     <table id="productoTabla" class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th>Producto</th>
-                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Categoria</th> <!-- Nueva columna para la categoría -->
+                                            <th>Stock</th> <!-- Nueva columna para el stock -->
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        <!-- Aquí usamos Thymeleaf para iterar sobre la lista de productos -->
                                         <tr th:each="producto : ${productos}" onclick="seleccionarFila(this)">
                                             <td th:text="${producto.nombre}"></td> <!-- Nombre del producto -->
-<!--                                            <td th:text="${producto.precioVenta}"></td> &lt;!&ndash; Precio del producto &ndash;&gt;-->
-<!--                                            <td th:text="${producto.categoria}"></td> &lt;!&ndash; Categoría del producto &ndash;&gt;-->
-                                            <td th:text="${producto.stock}"></td>
-                                            <input type="hidden" th:value="${producto.precioVenta}" class="productoPrecio">
+                                            <td th:text="${producto.precioVenta}"></td> <!-- Precio del producto -->
+                                            <td th:text="${producto.categoria.nombre}"></td> <!-- Categoría del producto -->
+                                            <td th:text="${producto.stock}"></td> <!-- Stock del producto -->
+                                            <!-- Incluir un atributo data para pasar el nombre del producto directamente -->
                                             <input type="hidden" th:value="${producto.nombre}" class="productoNombre">
                                             <input type="hidden" th:value="${producto.categoria.nombre}" class="productoCategoria">
                                             <input type="hidden" th:value="${producto.stock}" class="productoStock">
@@ -142,8 +144,8 @@
                                 if (cells.length > 0) {
                                     var productName = cells[0].textContent || cells[0].innerText;
 
-                                    // Mostrar solo los productos que coincidan con la búsqueda y mostrar un máximo de 5
-                                    if (productName.toLowerCase().indexOf(filter) > -1 && count < 5) {
+                                    // Mostrar solo los productos que coincidan con la búsqueda y mostrar un máximo de 10
+                                    if (productName.toLowerCase().indexOf(filter) > -1 && count < 10) {
                                         rows[i].style.display = "";
                                         count++;
                                     } else {
@@ -155,18 +157,10 @@
 
                         // Función para seleccionar una fila y poner su nombre en el campo de búsqueda
                         function seleccionarFila(row) {
-                            // Obtener el stock del producto
-                            var productStock = row.querySelector(".productoStock").value;
-
-                            // Solo permitir seleccionar si el stock es mayor a 0
-                            if (parseInt(productStock) <= 0) {
-                                return; // Si el stock es menor o igual a 0, no se hace nada
-                            }
-
                             // Obtener los valores de producto desde los inputs hidden
                             var productName = row.querySelector(".productoNombre").value;
-                            var precio = row.querySelector(".productoPrecio").value;
                             var productCategory = row.querySelector(".productoCategoria").value;
+                            var productStock = row.querySelector(".productoStock").value;
 
                             // Colocar el nombre del producto en el campo de búsqueda
                             document.getElementById("productNombre").value = productName;
@@ -176,7 +170,7 @@
                             var productPrice = row.cells[1].innerText; // Asumiendo que el precio está en la segunda columna
 
                             document.getElementById("productCode").value = productCode;
-                            document.getElementById("productPrice").value = precio;
+                            document.getElementById("productPrice").value = productPrice;
                             document.getElementById("productType").value = productCategory; // Asignando categoría
                             document.getElementById("productStock").value = productStock; // Asignando stock
 
@@ -199,28 +193,19 @@
                                 document.getElementById("productType").value = "";
                                 document.getElementById("productPrice").value = "";
                                 document.getElementById("productStock").value = "";
-
-                                // Eliminar la clase 'selected' de todas las filas si el campo está vacío
-                                var table = document.getElementById("productoTabla");
-                                var rows = table.getElementsByTagName("tr");
-                                for (var i = 0; i < rows.length; i++) {
-                                    rows[i].classList.remove("selected"); // Eliminar la clase de selección
-                                }
                             }
                         });
 
-                        // Mostrar solo los primeros 5 productos al cargar la página
+                        // Mostrar solo los primeros 10 productos al cargar la página
                         document.addEventListener("DOMContentLoaded", function () {
                             filtrarTabla();  // Inicializa el filtrado de la tabla
                         });
                     </script>
 
-
-
                     <style>
                         /* Estilo para resaltar la fila seleccionada */
                         .selected {
-                            background-color: green; /* Color de fondo cuando se selecciona la fila */
+                            background-color: blue; /* Color de fondo cuando se selecciona la fila */
                         }
                     </style>
                 </div>
