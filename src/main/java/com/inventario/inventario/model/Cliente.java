@@ -12,11 +12,13 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
 
     private String nombre;
     private String telefono;
+    @Column(unique = true, nullable = false, length = 11)
+    private String ci_nit;
 
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

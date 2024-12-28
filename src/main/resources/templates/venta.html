@@ -28,7 +28,7 @@
             <div class="container mt-2">
                 <div class="row">
                     <!-- Columna 1 -->
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <!-- Código de Producto -->
                         <div class="mb-3">
                             <label for="productCode" class="form-label">Código de Producto</label>
@@ -73,7 +73,7 @@
 
                             <!-- Método de Pago -->
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="paymentMethod" class="form-label">Método de Pago</label>
                                     <select class="form-select" id="paymentMethod">
                                         <option value="cash">Efectivo</option>
@@ -128,92 +128,7 @@
                         </div>
                     </div>
 
-                    <script>
-                        // Función para filtrar productos en la tabla según el nombre
-                        function filtrarTabla() {
-                            var input = document.getElementById("productNombre");
-                            var filter = input.value.toLowerCase();
-                            var table = document.getElementById("productoTabla");
-                            var rows = table.getElementsByTagName("tr");
-
-                            var count = 0;
-                            for (var i = 0; i < rows.length; i++) {
-                                var cells = rows[i].getElementsByTagName("td");
-                                if (cells.length > 0) {
-                                    var productName = cells[0].textContent || cells[0].innerText;
-
-                                    // Mostrar solo los productos que coincidan con la búsqueda y mostrar un máximo de 5
-                                    if (productName.toLowerCase().indexOf(filter) > -1 && count < 5) {
-                                        rows[i].style.display = "";
-                                        count++;
-                                    } else {
-                                        rows[i].style.display = "none";
-                                    }
-                                }
-                            }
-                        }
-
-                        // Función para seleccionar una fila y poner su nombre en el campo de búsqueda
-                        function seleccionarFila(row) {
-                            // Obtener el stock del producto
-                            var productStock = row.querySelector(".productoStock").value;
-
-                            // Solo permitir seleccionar si el stock es mayor a 0
-                            if (parseInt(productStock) <= 0) {
-                                return; // Si el stock es menor o igual a 0, no se hace nada
-                            }
-
-                            // Obtener los valores de producto desde los inputs hidden
-                            var productName = row.querySelector(".productoNombre").value;
-                            var precio = row.querySelector(".productoPrecio").value;
-                            var productCategory = row.querySelector(".productoCategoria").value;
-
-                            // Colocar el nombre del producto en el campo de búsqueda
-                            document.getElementById("productNombre").value = productName;
-
-                            // Actualizar los demás campos con los valores correspondientes
-                            var productCode = row.cells[0].innerText; // Asumiendo que el código está en la primera columna
-                            var productPrice = row.cells[1].innerText; // Asumiendo que el precio está en la segunda columna
-
-                            document.getElementById("productCode").value = productCode;
-                            document.getElementById("productPrice").value = precio;
-                            document.getElementById("productType").value = productCategory; // Asignando categoría
-                            document.getElementById("productStock").value = productStock; // Asignando stock
-
-                            // Limpiar selección anterior
-                            var table = document.getElementById("productoTabla");
-                            var rows = table.getElementsByTagName("tr");
-                            for (var i = 0; i < rows.length; i++) {
-                                rows[i].classList.remove("selected"); // Eliminar la clase de selección de todas las filas
-                            }
-
-                            // Marcar la fila seleccionada
-                            row.classList.add("selected");
-                        }
-
-                        // Restablecer valores si el campo se vacía
-                        document.getElementById("productNombre").addEventListener("input", function() {
-                            if (this.value === "") {
-                                // Restablecer los valores de los demás campos a los placeholders
-                                document.getElementById("productCode").value = "";
-                                document.getElementById("productType").value = "";
-                                document.getElementById("productPrice").value = "";
-                                document.getElementById("productStock").value = "";
-
-                                // Eliminar la clase 'selected' de todas las filas si el campo está vacío
-                                var table = document.getElementById("productoTabla");
-                                var rows = table.getElementsByTagName("tr");
-                                for (var i = 0; i < rows.length; i++) {
-                                    rows[i].classList.remove("selected"); // Eliminar la clase de selección
-                                }
-                            }
-                        });
-
-                        // Mostrar solo los primeros 5 productos al cargar la página
-                        document.addEventListener("DOMContentLoaded", function () {
-                            filtrarTabla();  // Inicializa el filtrado de la tabla
-                        });
-                    </script>
+                    <script src="/js/tabla-registro-venta.js"></script>
 
 
 
@@ -224,6 +139,40 @@
                         }
                     </style>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- Tabla de Productos Agregados -->
+                <div class="mb-4">
+                    <table id="addedProductsTable" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Los productos agregados se mostrarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <script>
+
+                </script>
+
             </div>
         </main>
 

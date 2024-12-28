@@ -28,7 +28,12 @@ public class ProductoController {
 
     @GetMapping
     public String listarProductos(Model model) {
-        model.addAttribute("producto", new Producto());
+        if (model.containsAttribute("producto")) {
+            Producto producto = (Producto) model.asMap().get("producto");
+            model.addAttribute("producto", producto);
+        } else {
+            model.addAttribute("producto", new Producto());
+        }
         model.addAttribute("productos", productoService.listarProductos());
         model.addAttribute("categorias", categoriaService.listarCategoriasOrdenadas());
         return "productos";
@@ -49,7 +54,7 @@ public class ProductoController {
         return "productos";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable("id") Integer id) {
         productoService.eliminarProductoPorId(id);
         return "redirect:/productos";

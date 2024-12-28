@@ -147,9 +147,14 @@
                                     <a th:href="@{'/productos/editar'+'/'+ ${producto.id}}" class="btn btn-warning btn-sm" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a th:href="@{'/productos/eliminar'+'/'+ ${producto.id}}" class="btn btn-danger btn-sm" title="Borrar">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
+
+                                    <form th:action="@{'/productos/eliminar/' + ${producto.id}}" method="post" class="d-inline-block" title="Borrar">
+                                        <input type="hidden" name="_method" value="DELETE" />  <!-- Simula DELETE -->
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+
                                 </td>
 
                                 <!--                                <td>-->
