@@ -17,7 +17,7 @@ public class Cliente {
 
     private String nombre;
     private String telefono;
-    @Column(unique = true, nullable = false, length = 11)
+    @Column(unique = true, length = 11)
     private String ci_nit;
 
 

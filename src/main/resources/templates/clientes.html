@@ -32,10 +32,10 @@
                             <li class="breadcrumb-item active">pr</li>
                         </ol>
 
-                        <button th:if="${cliente.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()">Agregar Proveedor</button>
-                        <button th:unless="${cliente.id == null}"  type="button" class="btn btn-primary" onclick="window.location.href='/clientes?abrirFormulario=true';">Agregar Proveedor</button>
-                        <button  th:if="${cliente.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()" disabled>Editar Proveedor</button>
-                        <button  th:unless="${cliente.id == null}"  type="button" class="btn btn-primary" onclick="abrirFormulario()">Editar Proveedor</button>
+                        <button th:if="${cliente.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()">Agregar Cliente</button>
+                        <button th:unless="${cliente.id == null}"  type="button" class="btn btn-primary" onclick="window.location.href='/clientes?abrirFormulario=true';">Agregar Cliente</button>
+                        <button  th:if="${cliente.id == null}" type="button" class="btn btn-primary" onclick="abrirFormulario()" disabled>Editar Cliente</button>
+                        <button  th:unless="${cliente.id == null}"  type="button" class="btn btn-primary" onclick="abrirFormulario()">Editar Cliente</button>
 
 
 
@@ -44,14 +44,14 @@
 
 
 
-                        <div id="formularioProveedor" style="display: none; margin-top: 20px;">
+                        <div id="formularioCliente" style="display: none; margin-top: 20px;">
                             <form th:action="@{/clientes/guardar}"  th:object="${cliente}" method="post">
                                 <div class="form-group">
                                     <div class="col-md-6">
 
-                                        <label for="nombreProveedor">Nombre cliente</label>
-                                        <input type="text" th:field="*{nombre}" id="nombreProveedor" name="nombre" value="d"
-                                               class="form-control" placeholder="Ingrese el nombre del cliente" >
+                                        <label for="nombreCliente">Nombre cliente</label>
+                                        <input type="text" th:field="*{nombre}" id="nombreCliente" name="nombre" value="d"
+                                               class="form-control" placeholder="Ingrese el nombre del cliente" required>
                                         <!-- Mostrar mensaje de error si existe -->
                                         <div th:if="${errorNombre}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorNombre}"></p>
@@ -64,19 +64,19 @@
 
 
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="email">Email</label>
-                                        <input type="email"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" >
+<!--                                    <div class="col-md-6">-->
+<!--                                        <label for="email">Email</label>-->
+<!--                                        <input type="email"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" >-->
 
-                                        <div th:if="${errorEmail}" class="alert alert-danger" role="alert">
-                                            <p th:text="${errorEmail}"></p>
-                                        </div>
+<!--                                        <div th:if="${errorEmail}" class="alert alert-danger" role="alert">-->
+<!--                                            <p th:text="${errorEmail}"></p>-->
+<!--                                        </div>-->
 
-                                        <div th:if="${errorNoArroba}" class="alert alert-danger" role="alert">
-                                            <p th:text="${errorNoArroba}"></p>
-                                        </div>
+<!--                                        <div th:if="${errorNoArroba}" class="alert alert-danger" role="alert">-->
+<!--                                            <p th:text="${errorNoArroba}"></p>-->
+<!--                                        </div>-->
 
-                                    </div>
+<!--                                    </div>-->
                                     <div class="col-md-4">
                                         <label for="telefono">Telefono</label>
                                         <input type="number"  th:field="*{telefono}" id="telefono" name="telefono" class="form-control" placeholder="telefono" >
@@ -85,11 +85,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <label for="direccion">direccion</label>
-                                        <input type="text"  th:field="*{direccion}" id="direccion" name="direccion" class="form-control" placeholder="direccion" >
+                                        <label for="ci-nit">CI/NIT</label>
+                                        <input type="text"  th:field="*{ci_nit}" id="ci-nit" name="ci-nit" class="form-control" placeholder="CI/NIT" required >
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-success">Guardar Proveedor</button>
+                                <button type="submit" class="btn btn-success">Guardar Cliente</button>
                                 <button type="button" class="btn btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
                             </form>
                         </div>
@@ -98,56 +98,52 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                               Clientes
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-
                                             <th>Nombre</th>
-                                            <th>Email</th>
                                             <th>Telefono</th>
-                                            <th>Direccion</th>
+                                            <th>CI/NIT</th>
                                             <th>Accion</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-
                                             <th>Nombre</th>
-                                            <th>Email</th>
                                             <th>Telefono</th>
-                                            <th>Direccion</th>
+                                            <th>CI/NIT</th>
                                             <th>Accion</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
 
 
-                                        <tr th:each="cliente : ${clienteList}"
-                                            th:classappend="${cliente.nombre == nombreDuplicado ? 'table-danger' : ''}">
+                                    <tr th:each="cliente : ${clientes}">
 
-                                            <td th:text="${cliente.nombre}"></td>
-                                            <td th:text="${cliente.email}"></td>
-                                            <td th:text="${cliente.telefono}"></td>
-                                            <td th:text="${cliente.direccion}"></td>
-                                            <td >
-                                                <a th:href="@{'/clientes/' + ${cliente.id}}" class="btn btn-primary btn-sm" title="Ver detalles">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a th:href="@{'/clientes/editar'+'/'+ ${cliente.id}}" class="btn btn-warning btn-sm" title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <form th:action="@{'/clientes/eliminar/' + ${cliente.id}}" method="post" class="d-inline-block" title="Borrar">
-                                                    <input type="hidden" name="_method" value="DELETE" />  <!-- Simula DELETE -->
-                                                    <button type="submit" class="btn btn-danger btn-sm">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
+                                        <td th:text="${cliente.nombre}"></td>
+                                        <td th:text="${cliente.telefono}"></td>
+                                        <td th:text="${cliente.ci_nit}"></td>
+                                        <td >
+                                            <a th:href="@{'/clientes/' + ${cliente.id}}" class="btn btn-primary btn-sm" title="Ver detalles">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a th:href="@{'/clientes/editar'+'/'+ ${cliente.id}}" class="btn btn-warning btn-sm" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form th:action="@{'/clientes/eliminar/' + ${cliente.id}}" method="post" class="d-inline-block" title="Borrar">
+                                                <input type="hidden" name="_method" value="DELETE" />  <!-- Simula DELETE -->
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
 
-                                            </td>
-                                        </tr>
+
+
+                                        </td>
+                                    </tr>
 
 
                                     </tbody>
@@ -159,21 +155,21 @@
                         window.onload = function() {
 
                             if (document.querySelector('.alert.alert-danger')) {
-                                document.getElementById('formularioProveedor').style.display = 'block';
+                                document.getElementById('formularioCliente').style.display = 'block';
                             } else {
-                                document.getElementById('formularioProveedor').style.display = 'none';
+                                document.getElementById('formularioCliente').style.display = 'none';
                             }
                         };
 
                         function abrirFormulario() {
-                            document.getElementById('formularioProveedor').style.display = 'block';
+                            document.getElementById('formularioCliente').style.display = 'block';
                         }
 
                         function cerrarFormulario() {
 
                             if (!document.querySelector('.alert.alert-danger')) {
                                 // Solo cerrar el formulario si no hay error
-                                document.getElementById('formularioProveedor').style.display = 'none';
+                                document.getElementById('formularioCliente').style.display = 'none';
                             }
                         }
 

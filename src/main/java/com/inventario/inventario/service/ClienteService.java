@@ -18,12 +18,11 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    // Obtener todos los clientes
+
     public List<Cliente> obtenerTodos() {
         return clienteRepository.findAll();
     }
 
-    // Obtener cliente por ID
     public Optional<Cliente> obtenerPorId(Long id) {
         return clienteRepository.findById(id);
     }

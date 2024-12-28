@@ -21,28 +21,29 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    // Página de lista de clientes
+
     @GetMapping
     public String listarClientes(Model model) {
+        if(model.containsAttribute("cliente")){
+            Cliente cliente = (Cliente) model.asMap().get("cliente");
+
+        }
+        else{
+            model.addAttribute("cliente", new Cliente());
+        }
         model.addAttribute("clientes", clienteService.obtenerTodos());
         return "clientes";
     }
 
-    // Página de creación o edición de cliente
-    @GetMapping("/nuevo")
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("cliente", new Cliente());
-        return "clientes";
-    }
 
-    // Guardar cliente nuevo o editado
+
+
     @PostMapping("/guardar")
     public String guardarCliente(@ModelAttribute Cliente cliente) {
         clienteService.guardar(cliente);
         return "redirect:/clientes";
     }
 
-    // Página de edición de cliente
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable Long id, Model model) {
         Optional<Cliente> clienteOpt = clienteService.obtenerPorId(id);
@@ -53,7 +54,7 @@ public class ClienteController {
         return "redirect:/clientes";
     }
 
-    // Eliminar cliente
+
     @GetMapping("/eliminar/{id}")
     public String eliminarCliente(@PathVariable Long id) {
         clienteService.eliminar(id);
