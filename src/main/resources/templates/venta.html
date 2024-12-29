@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <title>Productos</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
+    <link href="/css/styles.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -19,9 +19,7 @@
     <div th:replace="fragments/sideBar_1 :: sideBar_1"></div>
 
 
-
     <div id="layoutSidenav_content">
-
 
 
         <main>
@@ -30,30 +28,36 @@
                     <!-- Columna 1 -->
                     <div class="col-md-3">
                         <!-- Código de Producto -->
+                        <input type="hidden" id="productId">
+
                         <div class="mb-3">
                             <label for="productCode" class="form-label">Código de Producto</label>
-                            <input type="text" class="form-control" id="productCode" placeholder="Código de Producto" disabled>
+                            <input type="text" class="form-control" id="productCode" placeholder="Código de Producto"
+                                   disabled>
                         </div>
 
                         <!-- Tipo de Producto -->
                         <div class="mb-3">
                             <label for="productType" class="form-label">Tipo de Producto</label>
-                            <input type="text" class="form-control" id="productType" placeholder="Tipo de Producto" disabled>
+                            <input type="text" class="form-control" id="productType" placeholder="Tipo de Producto"
+                                   disabled>
                         </div>
 
                         <!-- Precio -->
                         <div class="mb-3">
                             <label for="productPrice" class="form-label">Precio</label>
-                            <input type="text" class="form-control" id="productPrice" placeholder="Precio del Producto" disabled>
+                            <input type="text" class="form-control" id="productPrice" placeholder="Precio del Producto"
+                                   disabled>
                         </div>
 
                         <!-- Stock -->
                         <div class="mb-3">
                             <label for="productStock" class="form-label">Stock</label>
-                            <input type="text" class="form-control" id="productStock" placeholder="Stock del Producto" disabled>
+                            <input type="text" class="form-control" id="productStock" placeholder="Stock del Producto"
+                                   disabled>
                         </div>
 
-<!--                         Cantidad y Método de Pago -->
+                        <!--                         Cantidad y Método de Pago -->
 
 
                     </div>
@@ -63,7 +67,8 @@
                     <div class="col-md-6">
                         <div class="mb-6">
                             <label for="productNombre" class="form-label">Producto</label>
-                            <input type="text" class="form-control" id="productNombre" placeholder="Buscar Producto" oninput="filtrarTabla()">
+                            <input type="text" class="form-control" id="productNombre" placeholder="Buscar Producto"
+                                   oninput="filtrarTabla()">
                         </div>
 
                         <!-- Contenedor de la tabla -->
@@ -81,12 +86,15 @@
 
                                         <tr th:each="producto : ${productos}" onclick="seleccionarFila(this)">
                                             <td th:text="${producto.nombre}"></td> <!-- Nombre del producto -->
-<!--                                            <td th:text="${producto.precioVenta}"></td> &lt;!&ndash; Precio del producto &ndash;&gt;-->
-<!--                                            <td th:text="${producto.categoria}"></td> &lt;!&ndash; Categoría del producto &ndash;&gt;-->
+                                            <!--                                            <td th:text="${producto.precioVenta}"></td> &lt;!&ndash; Precio del producto &ndash;&gt;-->
+                                            <!--                                            <td th:text="${producto.categoria}"></td> &lt;!&ndash; Categoría del producto &ndash;&gt;-->
                                             <td th:text="${producto.stock}"></td>
-                                            <input type="hidden" th:value="${producto.precioVenta}" class="productoPrecio">
+                                            <input type="hidden" th:value="${producto.id}" class="productoId">
+                                            <input type="hidden" th:value="${producto.precioVenta}"
+                                                   class="productoPrecio">
                                             <input type="hidden" th:value="${producto.nombre}" class="productoNombre">
-                                            <input type="hidden" th:value="${producto.categoria.nombre}" class="productoCategoria">
+                                            <input type="hidden" th:value="${producto.categoria.nombre}"
+                                                   class="productoCategoria">
                                             <input type="hidden" th:value="${producto.stock}" class="productoStock">
                                         </tr>
                                         </tbody>
@@ -97,9 +105,7 @@
                     </div>
 
 
-
                     <script src="/js/tabla-registro-venta.js"></script>
-
 
 
                     <style>
@@ -110,14 +116,12 @@
                     </style>
 
 
-
-
-
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-2">
-                                    <label for="quantity" class="form-label">Cantidad</label><input type="checkbox" id="enableQuantity" class="ms-2" onclick="toggleQuantityInput()">
+                                    <label for="quantity" class="form-label">Cantidad</label>
+                                    <input type="checkbox"  id="enableQuantity" class="ms-2" onclick="toggleQuantityInput()">
                                     <input type="number" class="form-control" id="quantity" value="1" disabled>
                                 </div>
                             </div>
@@ -136,23 +140,15 @@
                         </div>
                         <div class="mb-3">
                             <label>&nbsp;</label>
-                            <button class="btn btn-primary form-control" id="addProductBtn" onclick="addProduct()">Agregar Producto</button>
+                            <button class="btn btn-primary form-control" id="addProductBtn" onclick="addProduct()">
+                                Agregar Producto
+                            </button>
                         </div>
                     </div>
 
                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
+                <form th:action="@{venta/guardar}" th:object="${wrapperVentas}" method="post">
                 <!-- Tabla de Productos Agregados -->
                 <div class="mb-4">
                     <table id="addedProductsTable" class="table table-striped">
@@ -163,54 +159,64 @@
                             <th>Cantidad</th>
                             <th>Precio Unitario</th>
                             <th>Subtotal</th>
+                            <th style="display: none;">ID</th> <!-- ocultar columna id -->
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- Los productos agregados se mostrarán aquí -->
+                        <!-- productos agregados se mostrarán aquí -->
                         </tbody>
                     </table>
                 </div>
 
 
 
+                    <div class="row">
 
 
-                <div class="row">
-                    <!-- Columna 1 -->
-                    <div class="col-md-3">
-                        <div class="col-mb-5">
-                            <label for="clientCiNit" class="form-label">CI/NIT</label>
-                            <input type="text" id="clientCiNit" class="form-control" placeholder="Buscar por CI/NIT">
+                        <div class="col-md-3">
+                            <div class="col-mb-5">
+                                <label for="clientCiNit" class="form-label">CI/NIT</label>
+                                <input type="text" id="clientCiNit" class="form-control"
+                                       placeholder="Buscar por CI/NIT">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="col-mb-5">
-                            <label for="clientName" class="form-label">Nombre</label>
-                            <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente" disabled>
+                        <div class="col-md-4">
+                            <div class="col-mb-5">
+                                <label for="clientName" class="form-label">Nombre</label>
+                                <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente"
+                                       disabled>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-2">
-                        <div class="col-mb-5">
-                            <label for="paymentMethod" class="form-label">Método de Pago</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option value="cash">Efectivo</option>
-                                <option value="card">Tarjeta</option>
-                                <option value="transfer">Transferencia</option>
-                            </select>
+
+                        <div class="col-md-2">
+                            <div class="col-mb-5">
+                                <label for="paymentMethod" class="form-label">Método de Pago</label>
+                                <select class="form-select" id="paymentMethod" th:field="*{ingreso.metodoPago}">
+
+
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="qr">Qr</option>
+                                    <option value="transferencia">Transferencia</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div class="col-mb-4 offset-md-1">
+                                    <!--                            <div class="col-mb-4 offset-md-8 text-end">-->
+                                    <label for="totalAmount" class="form-label fw-bold">TOTAL:</label>
+                                    <input type="text" id="totalAmount" th:field="*{ingreso.monto}"
+                                           class="form-control text-end fw-bold"  readonly>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="col-mb-4 offset-md-1">
-<!--                            <div class="col-mb-4 offset-md-8 text-end">-->
-                            <label for="totalAmount" class="form-label fw-bold">TOTAL:</label>
-                            <input type="text" id="totalAmount" class="form-control text-end fw-bold" placeholder="0.00" readonly>
-                        </div>
-                    </div>
 
-                </div>
-
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </form>
 
 
 
@@ -221,32 +227,35 @@
                 </script>
 
             </div>
-        </main>
 
+
+
+
+        </main>
 
 
     </div>
 
-<!--        <footer class="py-4 bg-light mt-auto">-->
-<!--            <div class="container-fluid px-4">-->
-<!--                <div class="d-flex align-items-center justify-content-between small">-->
-<!--                    <div class="text-muted">Web</div>-->
-<!--                    <div>-->
-<!--                        <a href="#">Privacy Policy</a>-->
-<!--                        &middot;-->
-<!--                        <a href="#">Terms &amp; Conditions</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </footer>-->
-<!--    </div>-->
+    <!--        <footer class="py-4 bg-light mt-auto">-->
+    <!--            <div class="container-fluid px-4">-->
+    <!--                <div class="d-flex align-items-center justify-content-between small">-->
+    <!--                    <div class="text-muted">Web</div>-->
+    <!--                    <div>-->
+    <!--                        <a href="#">Privacy Policy</a>-->
+    <!--                        &middot;-->
+    <!--                        <a href="#">Terms &amp; Conditions</a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </footer>-->
+    <!--    </div>-->
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 <script src="/js/scripts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="/assets/demo/chart-area-demo.js"></script>
 <script src="/assets/demo/chart-bar-demo.js"></script>
-
 
 
 s
@@ -254,10 +263,7 @@ s
 <script src="/js/tabla_t1_cdn.js"></script>
 
 
-
 <script src="/js/datatables-simple-demo.js"></script>
-
-
 
 
 </body>

@@ -33,6 +33,8 @@
                             }
 
                             // Obtener los valores de producto desde los inputs hidden
+                            var productoId = row.querySelector(".productoId").value;
+
                             var productName = row.querySelector(".productoNombre").value;
                             var precio = row.querySelector(".productoPrecio").value;
                             var productCategory = row.querySelector(".productoCategoria").value;
@@ -46,6 +48,8 @@
                             var productCode = row.cells[0].innerText; // Asumiendo que el código está en la primera columna
                             var productPrice = row.cells[1].innerText; // Asumiendo que el precio está en la segunda columna
 
+
+                            document.getElementById("productId").value= productoId;
                             document.getElementById("productCode").value = productCode;
                             document.getElementById("productPrice").value = precio;
                             document.getElementById("productType").value = productCategory; // Asignando categoría
@@ -68,6 +72,8 @@
                         document.getElementById("productNombre").addEventListener("input", function() {
                             if (this.value === "") {
                                 // Restablecer los valores de los demás campos a los placeholders
+
+                                document.getElementById("productId").value="";
                                 document.getElementById("productCode").value = "";
                                 document.getElementById("productType").value = "";
                                 document.getElementById("productPrice").value = "";
@@ -129,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function addProduct() {
     // Obtener los valores de los campos
+    const productId = document.getElementById("productId").value;
     const productCode = document.getElementById("productCode").value;
     const productName = document.getElementById("productNombre").value;
     const productQuantity = document.getElementById("quantity").value;
@@ -147,21 +154,37 @@ function addProduct() {
     const cell3 = newRow.insertCell(2);
     const cell4 = newRow.insertCell(3);
     const cell5 = newRow.insertCell(4);
+    const cell6 = newRow.insertCell(5);
 
     // Asignar los valores a las celdas
-    cell1.textContent = productCode;
+    cell1.textContent = productCode;         //cambiara code luego
     cell2.textContent = productName;
     cell3.textContent = productQuantity;
     cell4.textContent = productPrice;
     cell5.textContent = subtotal;
+    cell6.textContent = productId;
+    cell6.style.display = "none";            // Oculta el ID
+
+    // Opcional: agrega el ID como un atributo de la fila
+    newRow.setAttribute("data-id", productId);
+
+
+
+
+    // document.getElementById("clientCiNit").value = productId;
+
 
     // Limpiar los campos de entrada
+    document.getElementById("productId").value = "";
+
     document.getElementById("productCode").value = "";
     document.getElementById("productNombre").value = "";
     document.getElementById("productPrice").value = "";
     document.getElementById("productStock").value = "";
     document.getElementById("quantity").value = 1;
     document.getElementById("productType").value = "";
+
+    // document.getElementById("clientName").value = document.getElementById("paymentMethod").value;
 
 
      // Eliminar la clase 'selected' de todas las filas si el campo está vacío
@@ -170,6 +193,29 @@ function addProduct() {
      for (var i = 0; i < rows.length; i++) {
          rows[i].classList.remove("selected"); // Eliminar la clase de selección
      }
+     
+
+     updateTotal();
+
+     
+}
+
+
+// Función para calcular y mostrar el total
+function updateTotal() {
+    let total = 0;
+    const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+    const rows = tableVenta.getElementsByTagName("tr");
+
+    // Recorrer todas las filas y sumar los subtotales
+    for (let i = 0; i < rows.length; i++) {
+        const subtotalCell = rows[i].cells[4]; // Subtotal está en la columna 4
+        const subtotal = parseFloat(subtotalCell.textContent);
+        total += subtotal;
+    }
+
+    // Mostrar el total en el campo de entrada
+    document.getElementById("totalAmount").value = total.toFixed(2);
 }
 
 

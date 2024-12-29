@@ -27,12 +27,12 @@ public class ClienteService {
         return clienteRepository.findById(id);
     }
 
-    // Guardar o actualizar cliente
+
     public Cliente guardar(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    // Eliminar cliente
+
     public void eliminar(Long id) {
         clienteRepository.deleteById(id);
     }

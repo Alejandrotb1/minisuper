@@ -1,7 +1,8 @@
 package com.inventario.inventario.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
+
+import java.time.LocalTime;
 import java.util.List;
 
 import lombok.Data;
@@ -26,4 +27,15 @@ public class Venta {
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalles;
+
+
+
+    @Column(nullable = false)
+    private LocalTime hora;
+
+    @PrePersist
+    private void asignarHora() {
+        this.hora = LocalTime.now();
+    }
+
 }
