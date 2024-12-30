@@ -1,3 +1,53 @@
+function buscarClientePorNit() {
+    var ciNit = document.getElementById('clientCiNit').value;
+    console.log("Buscando por CI/NIT:", ciNit);  // Debugging
+
+    // Si el campo no está vacío
+    if (ciNit.length > 0) {
+        // Realizamos la petición AJAX al backend
+        fetch('http://localhost:8080/clientes/buscarClientePorNit?ciNit=' + ciNit)
+            .then(response => response.json())  // Esperamos una respuesta en formato JSON
+            .then(cliente => {
+                console.log("Cliente encontrado:", cliente);  // Debugging
+                // Si encontramos un cliente, asignamos el nombre al input
+                if (cliente) {
+                    document.getElementById('clientName').value = cliente.nombre;
+                    document.getElementById('clientId').value = cliente.id;
+                } else {
+                    document.getElementById('clientId').value = '';
+                    document.getElementById('clientName').value = ''; // Limpiar si no se encuentra
+                }
+            })
+            .catch(error => {
+                console.error('Error al buscar el cliente:', error);
+
+                document.getElementById('clientId').value = '';
+                document.getElementById('clientName').value = ''; // Limpiar en caso de error
+            });
+    } else {
+        // Limpiar el campo de nombre si el campo de CI/NIT está vacío
+        document.getElementById('clientId').value = '';
+        document.getElementById('clientName').value = '';
+
+    }
+}                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
                        // Función para filtrar productos en la tabla según el nombre
                         function filtrarTabla() {
                             var input = document.getElementById("productNombre");
@@ -222,75 +272,111 @@ function updateTotal() {
 
 
 
-function generateProductsJSON() {
-    const products = []; // Arreglo donde almacenaremos los productos
+var csrfToken = document.getElementById('csrfToken').value;
 
-    // Obtener la tabla y las filas de la tabla
-    const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
-    const rows = tableVenta.getElementsByTagName("tr");
 
-    // Recorrer las filas de la tabla
-    for (let i = 0; i < rows.length; i++) {
-        // Obtener los datos de cada celda
-        const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
-        const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
-        const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
-        const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
+console.log(csrfToken);
 
-        // Crear un objeto con los datos del producto, asegurándonos de que el productId esté al inicio
-        const product = {
-            productId: productId,
-            productQuantity: productQuantity,
-            productPrice: productPrice,
-            subtotal: subtotal
-        };
 
-        // Añadir el producto al arreglo
-        products.push(product);
-    }
+// var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+// var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-    // Devolver el JSON con todos los productos
-    return JSON.stringify(products); // Generar y devolver el JSON de los productos
-}
 
-function submitForm() {
-    // Primero, genera el JSON de los productos
-    const productsJSON = generateProductsJSON();  
 
-    // Recoger los datos del formulario
-    const clientCiNit = document.getElementById("clientCiNit").value;
-    const clientName = document.getElementById("clientName").value;
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const totalAmount = document.getElementById("totalAmount").value;
 
-    // Crear el objeto de datos que se enviará al servidor
-    const data = {
-        clientCiNit,
-        clientName,
-        paymentMethod,
-        products: JSON.parse(productsJSON),  // Convertir JSON de productos a objeto
-        totalAmount
+// // Asegúrate de que esta función esté definida antes de ser llamada
+// function getCSRFToken() {
+//     const match = document.cookie.match(/XSRF-TOKEN=([\s\S]+?)(;|$)/);
+//     return match ? match[1] : null;
+// }
+// let csrfToken = getCSRFToken();
+// // Ahora puedes llamar a esta función en window.onload
+// window.onload = function() {
+//     const csrfToken = getCSRFToken();
+//     console.log(csrfToken);  // Aquí debería mostrar el token CSRF si está presente
+// };
+
+
+
+
+function submitForm(event) {
+    // Evitar el envío predeterminado del formulario
+    event.preventDefault();
+    
+    // Crear el objeto de ingreso
+    const ingreso = {
+        metodoPago: document.getElementById("paymentMethod").value,  // Método de pago
+        monto: parseFloat(document.getElementById("totalAmount").value)  // Monto total
     };
 
-    // Mostrar el JSON en la consola antes de enviarlo
-    console.log("Datos a enviar al servidor:", data);
+    // Crear el objeto de venta
+    const venta = {
+        clienteId: parseInt(document.getElementById("clientId").value),  // ID del cliente
+        detalleVentas: []  // Detalles de la venta
+    };
 
-    // Enviar los datos al servidor usando fetch
-    fetch('/venta/guardar', {
+    // Recoger los productos de la tabla
+    const productsTable = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+    const rows = productsTable.getElementsByTagName('tr');
+    
+    // Iterar sobre las filas de la tabla para construir los detalles de la venta
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        venta.detalleVentas.push({
+            productoId: parseInt(cells[5].textContent),    // ID del producto (oculto en la tabla)
+            cantidad: parseInt(cells[2].textContent),      // Cantidad
+            precio_unitario: parseFloat(cells[3].textContent), // Precio unitario
+            subtotal: parseFloat(cells[4].textContent)     // Subtotal
+        });
+    }
+
+    // Crear el objeto final con la estructura esperada
+    const jsonData = {
+        ingreso: ingreso,
+        venta: venta
+    };
+
+    // Mostrar el JSON en la consola para ver qué se ha generado
+    console.log(JSON.stringify(jsonData));
+
+    // Aquí podrías enviar el JSON al servidor utilizando fetch o Ajax
+    // Por ejemplo:
+    // fetch('/ruta-del-servidor', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(jsonData)
+    // });
+
+
+
+    console.log(csrfToken);
+    // Obtener el token CSRF de la cookie
+
+    fetch('http://localhost:8080/venta/guardar', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+            
         },
-        body: JSON.stringify(data)  // Enviar todo como JSON
+        body: JSON.stringify(jsonData),
+        credentials: 'same-origin' 
     })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Success:', result);
-        // Aquí puedes manejar la respuesta del servidor
+    .then(response => {
+        if (response.ok) {
+            console.log("Datos enviados correctamente");
+            return response.json(); // O cualquier otro procesamiento de la respuesta
+        } else {
+            console.error("Error al enviar los datos");
+        }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error("Error de red o de conexión:", error);
     });
+    
+
 }
 
 

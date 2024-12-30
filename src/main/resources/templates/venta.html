@@ -105,15 +105,15 @@
                     </div>
 
 
-                    <script src="/js/tabla-registro-venta.js"></script>
+<!--                    <script src="/js/tabla-registro-venta.js"></script>-->
 
 
-                    <style>
-                        /* Estilo para resaltar la fila seleccionada */
-                        .selected {
-                            background-color: green; /* Color de fondo cuando se selecciona la fila */
-                        }
-                    </style>
+<!--                    <style>-->
+<!--                        /* Estilo para resaltar la fila seleccionada */-->
+<!--                        .selected {-->
+<!--                            background-color: green; /* Color de fondo cuando se selecciona la fila */-->
+<!--                        }-->
+<!--                    </style>-->
 
 
                     <div class="col-md-3">
@@ -148,7 +148,7 @@
 
                 </div>
 
-                <form th:action="@{venta/guardar}" th:object="${wrapperVentas}" method="post">
+                <form th:action="@{venta/guardar}" th:object="${wrapperVentas}" method="post" onsubmit="submitForm(event)" >
                 <!-- Tabla de Productos Agregados -->
                 <div class="mb-4">
                     <table id="addedProductsTable" class="table table-striped">
@@ -195,6 +195,7 @@
 
                         <div class="col-md-4">
                             <div class="col-mb-5">
+                                <input type="text" id="clientId">
                                 <label for="clientName" class="form-label">Nombre</label>
                                 <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente" disabled>
                             </div>
@@ -202,33 +203,7 @@
 
 
                         <script>
-                            function buscarClientePorNit() {
-                                var ciNit = document.getElementById('clientCiNit').value;
-                                console.log("Buscando por CI/NIT:", ciNit);  // Debugging
 
-                                // Si el campo no está vacío
-                                if (ciNit.length > 0) {
-                                    // Realizamos la petición AJAX al backend
-                                    fetch('http://localhost:8080/clientes/buscarClientePorNit?ciNit=' + ciNit)
-                                        .then(response => response.json())  // Esperamos una respuesta en formato JSON
-                                        .then(cliente => {
-                                            console.log("Cliente encontrado:", cliente);  // Debugging
-                                            // Si encontramos un cliente, asignamos el nombre al input
-                                            if (cliente) {
-                                                document.getElementById('clientName').value = cliente.nombre;
-                                            } else {
-                                                document.getElementById('clientName').value = ''; // Limpiar si no se encuentra
-                                            }
-                                        })
-                                        .catch(error => {
-                                            console.error('Error al buscar el cliente:', error);
-                                            document.getElementById('clientName').value = ''; // Limpiar en caso de error
-                                        });
-                                } else {
-                                    // Limpiar el campo de nombre si el campo de CI/NIT está vacío
-                                    document.getElementById('clientName').value = '';
-                                }
-                            }
                         </script>
 
 
@@ -259,7 +234,9 @@
                     </div>
 
 
-                    <button type="submit" class="btn btn-success" onclick="submitForm()" >Guardar</button>
+                    <input type="text" name="_csrf" th:value="${_csrf.token}" />
+
+                    <button type="submit" class="btn btn-success"  >Guardar</button>
                 </form>
 
 
@@ -279,6 +256,31 @@
 
 
     </div>
+
+
+                        <script src="/js/tabla-registro-venta.js"></script>
+
+
+                        <style>
+                            /* Estilo para resaltar la fila seleccionada */
+                            .selected {
+                                background-color: green; /* Color de fondo cuando se selecciona la fila */
+                            }
+                        </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!--        <footer class="py-4 bg-light mt-auto">-->
     <!--            <div class="container-fluid px-4">-->

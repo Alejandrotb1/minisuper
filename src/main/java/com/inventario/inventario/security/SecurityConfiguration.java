@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -52,10 +53,15 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
+		http.csrf()
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Asegura que el token CSRF se guarda en una cookie accesible desde JS
+				.and()
+
 				.authorizeHttpRequests(auth -> auth
 						// Bloquea acceso a "/registro" para el rol ROLE_CAJERO
+
 						.requestMatchers("/registro/**").not().hasAuthority("ROLE_CAJERO")
+
 						// Bloquea acceso a "/gastos" y sus rutas hijas para el rol ROLE_CAJERO
 						.requestMatchers("/gastos/**").not().hasAuthority("ROLE_CAJERO")
 						// Bloquea acceso a "/ingresos" y sus rutas hijas para el rol ROLE_CAJERO
@@ -65,9 +71,14 @@ public class SecurityConfiguration {
 						// Permite acceso a "/user/**" solo para el rol ROLE_USER
 						.requestMatchers("/user/**").hasAuthority("ROLE_USER")
 						// Permite el acceso a recursos estáticos
-						.requestMatchers("/js/**", "/css/**", "/img/**").permitAll()
+						.requestMatchers("/js/**", "/css/**", "/img/**").
+						permitAll()
+						.requestMatchers("/venta/**").authenticated()
+
 						// Requiere autenticación para cualquier otra ruta
 						.anyRequest().authenticated())
+
+
 				.formLogin(form -> form
 						.loginPage("/login").permitAll()
 						.defaultSuccessUrl("/index", true)) // Redirección controlada
@@ -82,6 +93,20 @@ public class SecurityConfiguration {
 
 		return http.build();
 	}
+
+//quitando security
+//	@Bean
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//		http
+//				.csrf().disable()  // Desactivar la protección CSRF (importante en pruebas locales)
+//				.authorizeHttpRequests(auth -> auth
+//						.anyRequest().permitAll()  // Permitir acceso sin restricciones a todas las rutas
+//				)
+//				.formLogin().disable()  // Desactivar la página de login
+//				.logout().disable();  // Desactivar la funcionalidad de logout
+//
+//		return http.build();
+//	}
 
 
 

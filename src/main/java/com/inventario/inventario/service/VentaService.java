@@ -1,6 +1,7 @@
 package com.inventario.inventario.service;
 
 
+import com.inventario.inventario.controller.dto.DetalleVentasDTO;
 import com.inventario.inventario.controller.dto.ProductoDTO;
 import com.inventario.inventario.enums.TipoTransaccion;
 import com.inventario.inventario.model.*;
@@ -37,6 +38,52 @@ public class VentaService {
     public Optional<Venta> obtenerVentaPorId(Long id) {
         return ventaRepository.findById(id);
     }
+
+
+    @Transactional
+    public Ingreso guardarIngresoConVentaYDetalles(Ingreso ingreso, Venta venta, List<DetalleVentasDTO> detalles) {
+        // 1. Guarda el ingreso y asocia el usuario autenticado
+        Usuario usuario = usuarioService.obtenerUsuarioAutenticado();
+        ingreso.setUsuario(usuario);
+        ingreso.setTipo(TipoTransaccion.VENTAS);
+        ingreso.setConcepto("Ventas");
+
+        // Guarda el ingreso
+        Ingreso ingresoGuardado = ingresoRepository.save(ingreso);
+        System.out.println("ingreso guardado");
+
+        // 2. Asocia la venta con el ingreso guardado
+        venta.setIngreso(ingresoGuardado);
+        Venta ventaGuardada = ventaRepository.save(venta);
+        System.out.println("venta guardada");
+        // 3. Asocia cada detalle de venta con la venta guardada
+        for (DetalleVentasDTO detalle : detalles) {
+            DetalleVenta detalleVenta = new DetalleVenta();
+            Producto producto = productoService.buscarProductoPorId(detalle.getProductoId());
+
+            // Asignar el producto al detalle de venta
+            detalleVenta.setProducto(producto);
+
+//            detalleVenta.setProducto(productoService.buscarProductoPorId(detalle.getProductoId()));
+//            detalleVenta.setProductoId(detalle.getProductoId());
+            detalleVenta.setCantidad(detalle.getCantidad());
+            detalleVenta.setPrecioUnitario(detalle.getPrecio_unitario());
+            detalleVenta.setSubtotal(detalle.getSubtotal());
+
+            // Asocia el detalle con la venta
+            detalleVenta.setVenta(ventaGuardada);
+
+            // Guarda el detalle de la venta
+            detalleVentaRepository.save(detalleVenta);
+        }
+
+        // 4. Retorna el ingreso guardado (o puedes retornar cualquier otra entidad si lo prefieres)
+        return ingresoGuardado;
+    }
+
+
+
+
 
 //    public Venta guardarVenta(Venta venta) {d
 //
