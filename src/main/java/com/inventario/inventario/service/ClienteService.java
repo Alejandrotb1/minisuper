@@ -1,7 +1,9 @@
 package com.inventario.inventario.service;
 
 import com.inventario.inventario.model.Cliente;
+import com.inventario.inventario.model.Producto;
 import com.inventario.inventario.repository.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,25 @@ public class ClienteService {
     }
 
 
+
+
+    public Cliente buscarClientePorNit(String ciNit) {
+        Cliente cliente = clienteRepository.findByCiNit(ciNit);
+        if (cliente == null) {
+            throw new EntityNotFoundException("Cliente no encontrado con el ci_nit: " + ciNit);
+        }
+        return cliente;
+    }
+
+
+
     public List<Cliente> obtenerTodos() {
         return clienteRepository.findAll();
+    }
+
+    public Cliente buscarClientePorId(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + id));
     }
 
     public Optional<Cliente> obtenerPorId(Long id) {

@@ -17,8 +17,8 @@ public class Cliente {
 
     private String nombre;
     private String telefono;
-    @Column(unique = true, length = 11)
-    private String ci_nit;
+    @Column(name = "ci_nit", unique = true, length = 11)
+    private String ciNit;
 
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -219,3 +219,252 @@ function updateTotal() {
 }
 
 
+
+
+
+function generateProductsJSON() {
+    const products = []; // Arreglo donde almacenaremos los productos
+
+    // Obtener la tabla y las filas de la tabla
+    const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+    const rows = tableVenta.getElementsByTagName("tr");
+
+    // Recorrer las filas de la tabla
+    for (let i = 0; i < rows.length; i++) {
+        // Obtener los datos de cada celda
+        const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
+        const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
+        const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
+        const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
+
+        // Crear un objeto con los datos del producto, asegurándonos de que el productId esté al inicio
+        const product = {
+            productId: productId,
+            productQuantity: productQuantity,
+            productPrice: productPrice,
+            subtotal: subtotal
+        };
+
+        // Añadir el producto al arreglo
+        products.push(product);
+    }
+
+    // Devolver el JSON con todos los productos
+    return JSON.stringify(products); // Generar y devolver el JSON de los productos
+}
+
+function submitForm() {
+    // Primero, genera el JSON de los productos
+    const productsJSON = generateProductsJSON();  
+
+    // Recoger los datos del formulario
+    const clientCiNit = document.getElementById("clientCiNit").value;
+    const clientName = document.getElementById("clientName").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const totalAmount = document.getElementById("totalAmount").value;
+
+    // Crear el objeto de datos que se enviará al servidor
+    const data = {
+        clientCiNit,
+        clientName,
+        paymentMethod,
+        products: JSON.parse(productsJSON),  // Convertir JSON de productos a objeto
+        totalAmount
+    };
+
+    // Mostrar el JSON en la consola antes de enviarlo
+    console.log("Datos a enviar al servidor:", data);
+
+    // Enviar los datos al servidor usando fetch
+    fetch('/venta/guardar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)  // Enviar todo como JSON
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Success:', result);
+        // Aquí puedes manejar la respuesta del servidor
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+
+
+
+
+
+
+// function generateProductsJSON() {
+//     const products = []; // Arreglo donde almacenaremos los productos
+
+//     // Obtener la tabla y las filas de la tabla
+//     const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+//     const rows = tableVenta.getElementsByTagName("tr");
+
+//     // Recorrer las filas de la tabla
+//     for (let i = 0; i < rows.length; i++) {
+//         // Obtener los datos de cada celda
+//         const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
+//         const productCode = rows[i].cells[0].textContent; // Código del producto (no usado, pero podrías usarlo)
+//         const productName = rows[i].cells[1].textContent; // Nombre del producto (no usado en el JSON)
+//         const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
+//         const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
+//         const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
+
+//         // Crear un objeto con los datos del producto
+//         const product = {
+//             productId: productId,
+//             productQuantity: productQuantity,
+//             productPrice: productPrice,
+//             subtotal: subtotal
+//         };
+
+//         // Añadir el producto al arreglo
+//         products.push(product);
+//     }
+
+//     // Devolver el JSON con todos los productos
+//     return JSON.stringify(products);
+// }
+
+
+
+
+
+// function submitForm() {
+//     const productsJSON = generateProductsJSON();  // Genera el JSON con los productos
+
+//     // Recoger los datos del formulario
+//     const clientCiNit = document.getElementById("clientCiNit").value;
+//     const clientName = document.getElementById("clientName").value;
+//     const paymentMethod = document.getElementById("paymentMethod").value;
+//     const totalAmount = document.getElementById("totalAmount").value;
+
+//     const data = {
+//         clientCiNit,
+//         clientName,
+//         paymentMethod,
+//         products: productsJSON,  // Aquí se envía el JSON con los productos
+//         totalAmount
+//     };
+
+//     // Mostrar el JSON en la página
+//     document.getElementById("jsonOutput").textContent = JSON.stringify(data, null, 2);
+
+//     // Mostrar el JSON en consola antes de enviarlo
+//     console.log("Datos a enviar al servidor:", data);
+
+//     // Enviar los datos al servidor usando fetch
+//     fetch('/venta/guardar', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)  // Enviar todo como JSON
+//     })
+//     .then(response => response.json())
+//     .then(result => {
+//         console.log('Success:', result);
+//         // Aquí puedes manejar la respuesta del servidor
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//     });
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function submitForm() {
+//     // Primero, genera el JSON de los productos
+//     const productsJSON = generateProductsJSON();  
+
+//     // Recoger los datos del formulario
+//     const clientCiNit = document.getElementById("clientCiNit").value;
+//     const clientName = document.getElementById("clientName").value;
+//     const paymentMethod = document.getElementById("paymentMethod").value;
+//     const totalAmount = document.getElementById("totalAmount").value;
+
+//     // Crear el objeto de datos que se enviará al servidor
+//     const data = {
+//         clientCiNit,
+//         clientName,
+//         paymentMethod,
+//         products: JSON.parse(productsJSON),  // Convertir JSON de productos a objeto
+//         totalAmount
+//     };
+
+//     // Mostrar el JSON en la página
+//     document.getElementById("jsonOutput").textContent = JSON.stringify(data, null, 2); // Mostrar el JSON
+
+//     // Mostrar el JSON en la consola antes de enviarlo
+//     console.log("Datos a enviar al servidor:", data);
+
+//     // Enviar los datos al servidor usando fetch
+//     fetch('/venta/guardar', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)  // Enviar todo como JSON
+//     })
+//     .then(response => response.json())
+//     .then(result => {
+//         console.log('Success:', result);
+//         // Aquí puedes manejar la respuesta del servidor
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//     });
+// }
+
+// function generateProductsJSON() {
+//     const products = []; // Arreglo donde almacenaremos los productos
+
+//     // Obtener la tabla y las filas de la tabla
+//     const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+//     const rows = tableVenta.getElementsByTagName("tr");
+
+//     // Recorrer las filas de la tabla
+//     for (let i = 0; i < rows.length; i++) {
+//         // Obtener los datos de cada celda
+//         const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
+//         const productCode = rows[i].cells[0].textContent; // Código del producto (no usado, pero podrías usarlo)
+//         const productName = rows[i].cells[1].textContent; // Nombre del producto (no usado en el JSON)
+//         const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
+//         const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
+//         const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
+
+//         // Crear un objeto con los datos del producto
+//         const product = {
+//             productId: productId,
+//             productQuantity: productQuantity,
+//             productPrice: productPrice,
+//             subtotal: subtotal
+//         };
+
+//         // Añadir el producto al arreglo
+//         products.push(product);
+//     }
+
+//     // Devolver el JSON con todos los productos
+//     return JSON.stringify(products); // Generar y devolver el JSON de los productos
+// }

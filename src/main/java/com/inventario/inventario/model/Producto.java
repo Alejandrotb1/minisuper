@@ -37,7 +37,7 @@ public class Producto {
     private String descripcion;
 
     @Column(nullable = false)
-    private int stock=0;
+    private Integer stock=0;
 
 
     @Transient
