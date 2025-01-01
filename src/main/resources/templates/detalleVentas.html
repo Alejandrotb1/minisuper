@@ -113,9 +113,9 @@
                             <tr th:each="detalle : ${venta.detalles}">
                                 <td th:text="${detalle.producto.codigo}"></td>
                                 <td th:text="${detalle.producto.nombre}"></td>
-                                <td th:text="${detalle.id}"></td>
-                                <td th:text="${detalle.id}"></td>
-                                <td th:text="${detalle.id}"></td>
+                                <td th:text="${detalle.cantidad}"></td>
+                                <td th:text="${detalle.precioUnitario}"></td>
+                                <td th:text="${detalle.subtotal}"></td>
                                 <!--                                <th style="display: none;">ID</th> &lt;!&ndash; ocultar columna id &ndash;&gt;-->
                             </tr>
                             <!-- productos agregados se mostrarán aquí -->

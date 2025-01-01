@@ -26,7 +26,7 @@ public class CategoriaController {
     public String listarCategorias(Model model) {
         List<Categoria> listaCategorias = categoriaService.listarCategorias();
         model.addAttribute("listaCategorias", listaCategorias);
-        return "tablaCategorias";
+        return "categorias";
     }
 
     @PostMapping("/categorias/guardar")

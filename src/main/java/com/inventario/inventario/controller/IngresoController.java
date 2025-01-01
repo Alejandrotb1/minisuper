@@ -7,8 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ingresos")
@@ -57,4 +61,41 @@ public class IngresoController {
         ingresoService.eliminarIngreso(id);
         return "redirect:/ingresos";
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @GetMapping("/grafico")
+    @ResponseBody
+    public Map<String, BigDecimal> obtenerDatosGrafico() {
+        // Obtener todos los ingresos
+        List<Ingreso> ingresos = ingresoService.obtenerTodosLosIngresos();
+
+        // Agrupar los ingresos por fecha y sumar los montos
+        Map<LocalDate, BigDecimal> ingresosPorFecha = ingresos.stream()
+                .collect(Collectors.groupingBy(
+                        Ingreso::getFecha,
+                        Collectors.reducing(BigDecimal.ZERO, Ingreso::getMonto, BigDecimal::add)
+                ));
+
+        // Convertir los datos a Map<String, BigDecimal> donde la fecha es un String
+        Map<String, BigDecimal> datosGrafico = ingresosPorFecha.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().toString(),  // Fecha como String
+                        Map.Entry::getValue  // Monto total
+                ));
+
+        return datosGrafico;  // Retorna los datos para el gráfico
+    }
+
+
 }
