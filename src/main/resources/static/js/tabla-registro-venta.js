@@ -48,7 +48,7 @@ function buscarClientePorNit() {
                        
                        
                        
-                       // Función para filtrar productos en la tabla según el nombre
+                       //  filtrar productos 
                         function filtrarTabla() {
                             var input = document.getElementById("productNombre");
                             var filter = input.value.toLowerCase();
@@ -224,7 +224,7 @@ function addProduct() {
     // document.getElementById("clientCiNit").value = productId;
 
 
-    // Limpiar los campos de entrada
+    // limipiar
     document.getElementById("productId").value = "";
 
     document.getElementById("productCode").value = "";
@@ -270,7 +270,7 @@ function updateTotal() {
 
 
 
-
+//token input
 
 var csrfToken = document.getElementById('csrfToken').value;
 
@@ -278,279 +278,131 @@ var csrfToken = document.getElementById('csrfToken').value;
 console.log(csrfToken);
 
 
-// var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-// var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 
+// function submitForm(event) {
 
 
-// // Asegúrate de que esta función esté definida antes de ser llamada
-// function getCSRFToken() {
-//     const match = document.cookie.match(/XSRF-TOKEN=([\s\S]+?)(;|$)/);
-//     return match ? match[1] : null;
+//     event.preventDefault();
+
+//     const ingreso = {
+
+
+//         metodoPago: document.getElementById("paymentMethod").value,
+//         monto: parseFloat(document.getElementById("totalAmount").value)
+//     };
+
+//     const venta = {
+
+
+//         clienteId: parseInt(document.getElementById("clientId").value),
+//         detalleVentas: []
+//     };
+
+//     const productsTable = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+//     const rows = productsTable.getElementsByTagName('tr');
+    
+//     for (let i = 0; i < rows.length; i++) {
+//         const cells = rows[i].getElementsByTagName('td');
+//         venta.detalleVentas.push({
+
+
+//             productoId: parseInt(cells[5].textContent),
+//             cantidad: parseInt(cells[2].textContent),
+//             precio_unitario: parseFloat(cells[3].textContent),
+//             subtotal: parseFloat(cells[4].textContent)
+//         });
+//     }
+
+//     const jsonData = { ingreso: ingreso, venta: venta };
+//     const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+//     const xhr = new XMLHttpRequest();
+//     xhr.open("POST", 'http://localhost:8080/venta/guardar', true);
+//     xhr.setRequestHeader('Content-Type', 'application/json');
+//     xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+//     // xhr.onreadystatechange = function() {
+//     //     if (xhr.readyState === XMLHttpRequest.DONE) {
+//     //         if (xhr.status === 200) {
+//     //             console.log("Datos enviados correctamente");
+//     //             location.reload(true);
+//     //         } else {
+//     //             console.error("Error al enviar los datos");
+//     //         }
+//     //     }
+//     // };
+
+
+//     // xhr.onreadystatechange = function() {
+//     //     if (xhr.readyState === XMLHttpRequest.DONE) {
+//     //         if (xhr.status === 200) {
+//     //             console.log("Datos enviados correctamente");
+//     //             window.location.href = "http://localhost:8080/venta"; // Redirigir a /venta sin pasar datos
+//     //         } else {
+//     //             console.error("Error al enviar los datos");
+//     //         }
+//     //     }
+//     // };
+
+//     xhr.send(JSON.stringify(jsonData));
+
+//     window.location.href = "http://localhost:8080/venta"; // Redirigir a /venta sin pasar datos
+
 // }
-// let csrfToken = getCSRFToken();
-// // Ahora puedes llamar a esta función en window.onload
-// window.onload = function() {
-//     const csrfToken = getCSRFToken();
-//     console.log(csrfToken);  // Aquí debería mostrar el token CSRF si está presente
-// };
-
 
 
 
 function submitForm(event) {
-    // Evitar el envío predeterminado del formulario
-    event.preventDefault();
-    
-    // Crear el objeto de ingreso
     const ingreso = {
-        metodoPago: document.getElementById("paymentMethod").value,  // Método de pago
-        monto: parseFloat(document.getElementById("totalAmount").value)  // Monto total
+        metodoPago: document.getElementById("paymentMethod").value,
+        monto: parseFloat(document.getElementById("totalAmount").value),
     };
 
-    // Crear el objeto de venta
     const venta = {
-        clienteId: parseInt(document.getElementById("clientId").value),  // ID del cliente
-        detalleVentas: []  // Detalles de la venta
+        clienteId: parseInt(document.getElementById("clientId").value),
+        detalleVentas: [],
     };
 
-    // Recoger los productos de la tabla
     const productsTable = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
     const rows = productsTable.getElementsByTagName('tr');
-    
-    // Iterar sobre las filas de la tabla para construir los detalles de la venta
+
     for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName('td');
         venta.detalleVentas.push({
-            productoId: parseInt(cells[5].textContent),    // ID del producto (oculto en la tabla)
-            cantidad: parseInt(cells[2].textContent),      // Cantidad
-            precio_unitario: parseFloat(cells[3].textContent), // Precio unitario
-            subtotal: parseFloat(cells[4].textContent)     // Subtotal
+            productoId: parseInt(cells[5].textContent),
+            cantidad: parseInt(cells[2].textContent),
+            precio_unitario: parseFloat(cells[3].textContent),
+            subtotal: parseFloat(cells[4].textContent),
         });
     }
 
-    // Crear el objeto final con la estructura esperada
-    const jsonData = {
-        ingreso: ingreso,
-        venta: venta
+    const jsonData = { ingreso: ingreso, venta: venta };
+    const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", 'http://localhost:8080/venta/guardar', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+    // Manejo de la respuesta del servidor
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log("Datos enviados correctamente");
+                window.location.href = "http://localhost:8080/venta"; // Redirige solo si la respuesta fue exitosa
+            } else {
+                console.error("Error al enviar los datos");
+                alert("Hubo un error al guardar los datos. Inténtalo de nuevo.");
+            }
+        }
     };
 
-    // Mostrar el JSON en la consola para ver qué se ha generado
-    console.log(JSON.stringify(jsonData));
+    xhr.send(JSON.stringify(jsonData));
 
-    // Aquí podrías enviar el JSON al servidor utilizando fetch o Ajax
-    // Por ejemplo:
-    // fetch('/ruta-del-servidor', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(jsonData)
-    // });
-
-
-
-    console.log(csrfToken);
-    // Obtener el token CSRF de la cookie
-
-    fetch('http://localhost:8080/venta/guardar', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-            
-        },
-        body: JSON.stringify(jsonData),
-        credentials: 'same-origin' 
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Datos enviados correctamente");
-            return response.json(); // O cualquier otro procesamiento de la respuesta
-        } else {
-            console.error("Error al enviar los datos");
-        }
-    })
-    .catch(error => {
-        console.error("Error de red o de conexión:", error);
-    });
-    
-
+    // Previene comportamiento por defecto si es necesario (ej. evitar recargar página)
+    event.preventDefault();
 }
 
 
 
-
-
-
-
-
-
-// function generateProductsJSON() {
-//     const products = []; // Arreglo donde almacenaremos los productos
-
-//     // Obtener la tabla y las filas de la tabla
-//     const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
-//     const rows = tableVenta.getElementsByTagName("tr");
-
-//     // Recorrer las filas de la tabla
-//     for (let i = 0; i < rows.length; i++) {
-//         // Obtener los datos de cada celda
-//         const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
-//         const productCode = rows[i].cells[0].textContent; // Código del producto (no usado, pero podrías usarlo)
-//         const productName = rows[i].cells[1].textContent; // Nombre del producto (no usado en el JSON)
-//         const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
-//         const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
-//         const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
-
-//         // Crear un objeto con los datos del producto
-//         const product = {
-//             productId: productId,
-//             productQuantity: productQuantity,
-//             productPrice: productPrice,
-//             subtotal: subtotal
-//         };
-
-//         // Añadir el producto al arreglo
-//         products.push(product);
-//     }
-
-//     // Devolver el JSON con todos los productos
-//     return JSON.stringify(products);
-// }
-
-
-
-
-
-// function submitForm() {
-//     const productsJSON = generateProductsJSON();  // Genera el JSON con los productos
-
-//     // Recoger los datos del formulario
-//     const clientCiNit = document.getElementById("clientCiNit").value;
-//     const clientName = document.getElementById("clientName").value;
-//     const paymentMethod = document.getElementById("paymentMethod").value;
-//     const totalAmount = document.getElementById("totalAmount").value;
-
-//     const data = {
-//         clientCiNit,
-//         clientName,
-//         paymentMethod,
-//         products: productsJSON,  // Aquí se envía el JSON con los productos
-//         totalAmount
-//     };
-
-//     // Mostrar el JSON en la página
-//     document.getElementById("jsonOutput").textContent = JSON.stringify(data, null, 2);
-
-//     // Mostrar el JSON en consola antes de enviarlo
-//     console.log("Datos a enviar al servidor:", data);
-
-//     // Enviar los datos al servidor usando fetch
-//     fetch('/venta/guardar', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)  // Enviar todo como JSON
-//     })
-//     .then(response => response.json())
-//     .then(result => {
-//         console.log('Success:', result);
-//         // Aquí puedes manejar la respuesta del servidor
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function submitForm() {
-//     // Primero, genera el JSON de los productos
-//     const productsJSON = generateProductsJSON();  
-
-//     // Recoger los datos del formulario
-//     const clientCiNit = document.getElementById("clientCiNit").value;
-//     const clientName = document.getElementById("clientName").value;
-//     const paymentMethod = document.getElementById("paymentMethod").value;
-//     const totalAmount = document.getElementById("totalAmount").value;
-
-//     // Crear el objeto de datos que se enviará al servidor
-//     const data = {
-//         clientCiNit,
-//         clientName,
-//         paymentMethod,
-//         products: JSON.parse(productsJSON),  // Convertir JSON de productos a objeto
-//         totalAmount
-//     };
-
-//     // Mostrar el JSON en la página
-//     document.getElementById("jsonOutput").textContent = JSON.stringify(data, null, 2); // Mostrar el JSON
-
-//     // Mostrar el JSON en la consola antes de enviarlo
-//     console.log("Datos a enviar al servidor:", data);
-
-//     // Enviar los datos al servidor usando fetch
-//     fetch('/venta/guardar', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)  // Enviar todo como JSON
-//     })
-//     .then(response => response.json())
-//     .then(result => {
-//         console.log('Success:', result);
-//         // Aquí puedes manejar la respuesta del servidor
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
-
-// function generateProductsJSON() {
-//     const products = []; // Arreglo donde almacenaremos los productos
-
-//     // Obtener la tabla y las filas de la tabla
-//     const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
-//     const rows = tableVenta.getElementsByTagName("tr");
-
-//     // Recorrer las filas de la tabla
-//     for (let i = 0; i < rows.length; i++) {
-//         // Obtener los datos de cada celda
-//         const productId = rows[i].cells[5].textContent; // ID del producto (oculto)
-//         const productCode = rows[i].cells[0].textContent; // Código del producto (no usado, pero podrías usarlo)
-//         const productName = rows[i].cells[1].textContent; // Nombre del producto (no usado en el JSON)
-//         const productQuantity = parseInt(rows[i].cells[2].textContent); // Cantidad
-//         const productPrice = parseFloat(rows[i].cells[3].textContent); // Precio
-//         const subtotal = parseFloat(rows[i].cells[4].textContent); // Subtotal
-
-//         // Crear un objeto con los datos del producto
-//         const product = {
-//             productId: productId,
-//             productQuantity: productQuantity,
-//             productPrice: productPrice,
-//             subtotal: subtotal
-//         };
-
-//         // Añadir el producto al arreglo
-//         products.push(product);
-//     }
-
-//     // Devolver el JSON con todos los productos
-//     return JSON.stringify(products); // Generar y devolver el JSON de los productos
-// }

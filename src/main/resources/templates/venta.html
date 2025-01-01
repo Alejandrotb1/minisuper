@@ -195,7 +195,7 @@
 
                         <div class="col-md-4">
                             <div class="col-mb-5">
-                                <input type="text" id="clientId">
+                                <input type="hidden" id="clientId">
                                 <label for="clientName" class="form-label">Nombre</label>
                                 <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente" disabled>
                             </div>
@@ -234,7 +234,7 @@
                     </div>
 
 
-                    <input type="text" name="_csrf" th:value="${_csrf.token}" />
+                    <input id="csrfToken" type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
                     <button type="submit" class="btn btn-success"  >Guardar</button>
                 </form>
@@ -300,6 +300,10 @@
         crossorigin="anonymous"></script>
 <script src="/js/scripts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
+
+
+
 <script src="/assets/demo/chart-area-demo.js"></script>
 <script src="/assets/demo/chart-bar-demo.js"></script>
 

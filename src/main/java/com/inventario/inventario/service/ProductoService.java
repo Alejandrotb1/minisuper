@@ -7,6 +7,7 @@ import com.inventario.inventario.repository.CategoriaRepository;
 import com.inventario.inventario.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,6 +30,20 @@ public class ProductoService {
         this.categoriaRepository = categoriaRepository;
     }
 */
+
+    public Producto actualizarStock(Integer productoId, int cantidad) {
+        Producto producto = productoRepository.findById(productoId)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+        if (producto.getStock() < cantidad) {
+            throw new IllegalArgumentException("No hay suficiente stock para completar la venta");
+        }
+
+
+        producto.setStock(producto.getStock() - cantidad);
+        return productoRepository.save(producto);
+    }
+
+
 
     public Producto buscarProductoPorId(Integer productoId) {
         return productoRepository.findById(productoId)

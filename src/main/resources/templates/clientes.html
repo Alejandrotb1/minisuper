@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <label for="ci-nit">CI/NIT</label>
-                                        <input type="text"  th:field="*{ci_nit}" id="ci-nit" name="ci-nit" class="form-control" placeholder="CI/NIT" required >
+                                        <input type="text"  th:field="*{ciNit}" id="ci-nit" name="ci-nit" class="form-control" placeholder="CI/NIT" required >
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-success">Guardar Cliente</button>
@@ -125,7 +125,7 @@
 
                                         <td th:text="${cliente.nombre}"></td>
                                         <td th:text="${cliente.telefono}"></td>
-                                        <td th:text="${cliente.ci_nit}"></td>
+                                        <td th:text="${cliente.ciNit}"></td>
                                         <td >
                                             <a th:href="@{'/clientes/' + ${cliente.id}}" class="btn btn-primary btn-sm" title="Ver detalles">
                                                 <i class="bi bi-eye"></i>

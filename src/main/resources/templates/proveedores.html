@@ -50,7 +50,7 @@
                                     <div class="col-md-6">
 
                                         <label for="nombreProveedor">Nombre proveedor</label>
-                                        <input type="text" th:field="*{nombre}" id="nombreProveedor" name="nombre" value="d"
+                                        <input type="text" th:field="*{nombre}" id="nombreProveedor" name="nombre"
                                                class="form-control" placeholder="Ingrese el nombre del proveedor" >
                                         <!-- Mostrar mensaje de error si existe -->
                                         <div th:if="${errorNombre}" class="alert alert-danger" role="alert">
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email">Email</label>
-                                        <input type="email"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" >
+                                        <input type="email"  th:field="*{email}" id="email" name="email" class="form-control" placeholder="email" required >
 
                                         <div th:if="${errorEmail}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorEmail}"></p>

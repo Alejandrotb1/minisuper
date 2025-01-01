@@ -53,9 +53,7 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Asegura que el token CSRF se guarda en una cookie accesible desde JS
-				.and()
+		http.csrf().and()
 
 				.authorizeHttpRequests(auth -> auth
 						// Bloquea acceso a "/registro" para el rol ROLE_CAJERO
