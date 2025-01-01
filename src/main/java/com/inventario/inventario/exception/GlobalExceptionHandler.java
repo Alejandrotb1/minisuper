@@ -14,7 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-   /* @ExceptionHandler(NoHandlerFoundException.class)
+    @ExceptionHandler(NoHandlerFoundException.class)
     public String handle404(NoHandlerFoundException ex, Model model) {
         model.addAttribute("errorMessage", "psgina solicitada no fue encontrada.");
         return "404";
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     public String handle500(Exception ex, Model model) {
         model.addAttribute("errorMessage", " error interno en el servidor.");
         return "/500";
-    }*/
+    }
 
 
     //    @ExceptionHandler(EntityNotFoundException.class) // Entidad no encontrada
