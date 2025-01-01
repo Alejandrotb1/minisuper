@@ -22,6 +22,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/venta")
@@ -60,12 +61,21 @@ public class VentaController {
 
         return "ventas";  // Nombre de la vista
     }
-    @GetMapping("/detalleVentas")
-    public String ListaDetalleVenta(Model model) {
-        model.addAttribute("detalleVenta", detalleVentaRepository.findAll());
+    @GetMapping("/detalleVentas/{id}")
+    public String ListaDetalleVenta(@PathVariable("id") Long id, Model model) {
 
-        return "detalleVentas";  // Nombre de la vista
+        Optional<Venta> ventaOptional = ventaService.obtenerVentaPorId(id);
+
+        if (ventaOptional.isPresent()) {
+            model.addAttribute("venta", ventaOptional.get());
+        } else {
+            model.addAttribute("venta", null);
+//            model.addAttribute("error", "Venta no encontrada");
+
+
     }
+        return "detalleVentas";
+        }
 
 
 

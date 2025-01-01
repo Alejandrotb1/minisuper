@@ -40,7 +40,9 @@ public class VentaService {
     }
 
     public Optional<Venta> obtenerVentaPorId(Long id) {
-        return ventaRepository.findById(id);
+        Optional<Venta> ventaOptional = ventaRepository.findById(id);
+        return Optional.ofNullable(ventaOptional.orElse(null));
+
     }
 
 
