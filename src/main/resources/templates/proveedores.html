@@ -79,7 +79,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="telefono">Telefono</label>
-                                        <input type="number"  th:field="*{telefono}" id="telefono" name="telefono" class="form-control" placeholder="telefono" >
+                                        <input type="text"  th:field="*{telefono}" id="telefono" name="telefono" class="form-control"
+                                               pattern="^\+?[0-9]*$"
+                                               title="Solo se permiten números y el símbolo +"
+                                               oninput="this.value=this.value.replace(/[^0-9+]/g,'')" placeholder="telefono" >
                                         <div th:if="${errorTelefono}" class="alert alert-danger" role="alert">
                                             <p th:text="${errorTelefono}"></p>
                                         </div>

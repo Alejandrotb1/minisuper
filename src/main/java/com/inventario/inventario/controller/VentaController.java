@@ -57,7 +57,7 @@ public class VentaController {
 
     @GetMapping("/ventas")
     public String ListaVentas(Model model) {
-        model.addAttribute("ventas", ventaService.obtenerTodosLosVentas());
+        model.addAttribute("ventas", ventaService.obtenerVentasOrdenadasPorFechaYHora());
 
         return "ventas";  // Nombre de la vista
     }

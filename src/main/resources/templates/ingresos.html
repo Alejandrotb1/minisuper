@@ -56,9 +56,18 @@
                             <input type="number" id="monto" th:field="*{monto}" class="form-control" placeholder="Ingrese el precio de compra" step="0.01" required>
 
 
-                            <label for="metodo-pago">Metodo de pago</label>
-                            <input type="text" id="metodo-pago" th:field="*{metodoPago}" class="form-control" placeholder="Ingrese la cantidad disponible" required>
+<!--                            <label for="metodo-pago">Metodo de pago</label>-->
+<!--                            <input type="text" id="metodo-pago" th:field="*{metodoPago}" class="form-control" placeholder="Ingrese la cantidad disponible" required>-->
+                            <div class="col-mb-5">
+                                <label for="paymentMethod" class="form-label">Método de Pago</label>
+                                <select class="form-select" id="paymentMethod" th:field="*{metodoPago}">
 
+
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="qr">Qr</option>
+                                    <option value="transferencia">Transferencia</option>
+                                </select>
+                            </div>
 
 
                             <label for="detalle">Detalle</label>

@@ -40,6 +40,8 @@ public class Transaccion {
     @Column(length = 20)
     private String metodoPago;
 
+
+    //comentar para agregar datos con el seeder ingresos/gastos
     @PrePersist
     private void asignarFecha() {
         this.fecha = LocalDate.now();

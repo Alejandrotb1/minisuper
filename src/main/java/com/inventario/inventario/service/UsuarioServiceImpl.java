@@ -24,7 +24,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private final UsuarioRepository usuarioRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	// Constructor para inyección de dependencias
 	public UsuarioServiceImpl(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -74,7 +73,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	public Usuario obtenerUsuarioAutenticado() {
-		// Obtener el nombre de usuario desde el contexto de seguridad
+		// obtener el nombre de usuario desde el contexto de seguridad
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username;
 
@@ -84,7 +83,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new IllegalStateException("No se ha encontrado un usuario autenticado.");
 		}
 
-		// Buscar el usuario en la base de datos
+		// buscar el usuario en la base de datos
 		Usuario usuario = usuarioRepository.findByEmail(username);
 
 		if (usuario == null) {

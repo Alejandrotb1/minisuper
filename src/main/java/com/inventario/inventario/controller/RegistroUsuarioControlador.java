@@ -51,7 +51,7 @@ public class RegistroUsuarioControlador {
 		// Agregar la lista de DTOs al modelo
 		model.addAttribute("usuarioRegistroDTOList", usuarioRegistroDTOList);
 
-		return "register1"; // Retorna la vista de registro
+		return "registro"; // Retorna la vista de registro
 	}
 
 

@@ -6,17 +6,17 @@ import com.inventario.inventario.model.Ingreso;
 import com.inventario.inventario.model.Usuario;
 import com.inventario.inventario.repository.IngresoRepository;
 import com.inventario.inventario.repository.UsuarioRepository;
-import com.inventario.inventario.service.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
+
+
+
 
 @Component
 public class IngresoSeeder implements CommandLineRunner {
@@ -46,30 +46,30 @@ public class IngresoSeeder implements CommandLineRunner {
 
         Usuario usuario = usuarioOptional.get();
 
-        // Insertar ingresos solo si ya existen en la base de datos
-        if (ingresoRepository.count() == 0) {
-            System.out.println("No existen ingresos en la base de datos.");
-        } else {
-            for (int i = 0; i < 10; i++) {
-                Ingreso ingreso = new Ingreso();
-                ingreso.setUsuario(usuario);  // Asignar el usuario con id = 1
-                ingreso.setMonto(BigDecimal.valueOf(faker.number().randomDouble(2, 100, 1000)));  // Monto aleatorio
-                ingreso.setFecha(faker.date().between(
-                                java.sql.Date.valueOf("2024-08-01"),
-                                java.sql.Date.valueOf("2024-12-30"))
-                        .toInstant()
-                        .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
-                        .toLocalDate());  // Convertir a LocalDate
+        // Establecer el rango de fechas para diciembre de 2024
+        LocalDate startDate = LocalDate.of(2024, 11, 1);
+        LocalDate endDate = LocalDate.of(2024, 11, 30);
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
 
-                ingreso.setConcepto(faker.commerce().productName());  // Concepto aleatorio
-                ingreso.setDetalle(faker.lorem().sentence());  // Detalle aleatorio
-                ingreso.setTipo(TipoTransaccion.INGRESO);  // Tipo de transacción INGRESO
+        // Insertar ingresos
+        for (int i = 0; i < 10; i++) {
+            Ingreso ingreso = new Ingreso();
+            ingreso.setUsuario(usuario);  // Asignar el usuario con id = 1
+            ingreso.setMonto(BigDecimal.valueOf(faker.number().randomDouble(2, 100, 1000)));  // Monto aleatorio
 
-                ingresoRepository.save(ingreso);  // Guardar ingreso
-                System.out.println("Ingreso guardado: " + ingreso.getConcepto());
-            }
-            System.out.println("Ingresos insertados con Faker.");
+            // Generar fecha aleatoria dentro del rango de diciembre de 2024
+            LocalDate randomDate = startDate.plusDays(faker.number().numberBetween(0, daysBetween + 1));
+            ingreso.setFecha(randomDate);  // Asignar la fecha aleatoria de diciembre de 2024
+
+            ingreso.setConcepto(faker.commerce().productName());  // Concepto aleatorio
+            ingreso.setDetalle(faker.lorem().sentence());  // Detalle aleatorio
+            ingreso.setTipo(TipoTransaccion.INGRESO);  // Tipo de transacción INGRESO
+
+            // No es necesario asignar la fecha aquí si ya se estableció en el Seeder
+            ingresoRepository.save(ingreso);  // Guardar ingreso
+            System.out.println("Ingreso guardado: " + ingreso.getConcepto());
         }
+
+        System.out.println("Ingresos insertados con Faker.");
     }
 }
-

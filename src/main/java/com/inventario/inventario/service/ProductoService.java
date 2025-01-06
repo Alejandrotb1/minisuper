@@ -31,6 +31,15 @@ public class ProductoService {
     }
 */
 
+
+    public long countProductosConStockCritico() {
+        return productoRepository.countProductosConStockCritico();
+    }
+
+    public long countProductosSinStock() {
+        return productoRepository.countProductosSinStock();
+    }
+
     public Producto actualizarStock(Integer productoId, int cantidad) {
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));

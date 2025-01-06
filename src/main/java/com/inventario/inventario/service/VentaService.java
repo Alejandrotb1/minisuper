@@ -10,9 +10,12 @@ import com.inventario.inventario.repository.IngresoRepository;
 import com.inventario.inventario.repository.VentaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +26,15 @@ public class VentaService {
     private VentaRepository ventaRepository;
     @Autowired
     private IngresoRepository ingresoRepository;
-    @Autowired UsuarioServiceImpl usuarioService;
     @Autowired
-    ClienteService clienteService;
+    private UsuarioServiceImpl usuarioService;
     @Autowired
-    DetalleVentaRepository detalleVentaRepository;
+    private ClienteService clienteService;
     @Autowired
-    ProductoService productoService;
+    private DetalleVentaRepository detalleVentaRepository;
+    @Autowired
+    private ProductoService productoService;
+
 
     public List<Venta> obtenerTodosLosVentas() {
         return ventaRepository.findAll();
@@ -38,6 +43,31 @@ public class VentaService {
     public List<Venta> obtenerTodasLosVentasRelaciones() {
         return ventaRepository.obtenerTodasLasVentasConRelaciones();
     }
+
+    public List<Venta> obtenerVentasOrdenadasPorFechaIngreso() {
+        return ventaRepository.findAllOrderByFechaIngresoDesc();
+    }
+    public List<Venta> obtenerVentasOrdenadasPorFechaYHora() {
+        return ventaRepository.findAllOrderByFechaAndHoraDesc();
+    }
+
+//  total ventas del mes
+
+    public BigDecimal obtenerMontoTotalVentasDelMes(LocalDate inicio, LocalDate fin) {
+        return ingresoRepository.obtenerMontoTotalVentasDelMes(inicio, fin).orElse(BigDecimal.ZERO);
+    }
+
+    //  contar las ventas del día
+    public long contarVentasDelDia(LocalDate fecha) {
+        return ventaRepository.countByFecha(fecha);
+    }
+//    obtener el monto total de las ventas del dia
+    public BigDecimal obtenerMontoTotalVentasDelDia(LocalDate fecha) {
+        return ventaRepository.sumarMontoVentasDelDia(fecha);
+    }
+
+
+
 
     public Optional<Venta> obtenerVentaPorId(Long id) {
         Optional<Venta> ventaOptional = ventaRepository.findById(id);

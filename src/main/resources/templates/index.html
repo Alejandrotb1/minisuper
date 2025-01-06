@@ -10,26 +10,12 @@
         <title>Dashboard - SB Admin</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
 
 
 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            /* Hacer que el contenedor del gráfico tenga desplazamiento horizontal */
-            .chart-container {
-                overflow-x: auto;
-                width: 100%;
-            }
 
-            /* Asegurar que el canvas tenga un tamaño lo suficientemente grande para requerir desplazamiento */
-            #myAreaChart {
-                width: 2000px; /* Cambia esto según el tamaño que necesites */
-                height: 400px; /* Ajusta la altura según lo desees */
-            }
-        </style>
+
     </head>
     <body class="sb-nav-fixed">
     <div th:replace="fragments/navBar :: navbar"></div>
@@ -41,7 +27,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
+                        <h1 class="mt-4">Dashboard - <span th:text="${fechaActual}"></span></h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
@@ -83,104 +69,76 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="row">
-<!--                            <div class="col-xl-6">-->
-<!--                                <div class="card mb-4">-->
-<!--                                    <div class="card-header">-->
-<!--                                        <i class="fas fa-chart-area me-1"></i>-->
-<!--                                        Ingresos-->
-<!--                                    </div>-->
-<!--                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!-- Ingresos del Mes -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">
+                                        <h5>Ingresos Totales del Mes</h5>
+                                        <p class="mb-0" id="ingresos-mes" th:text="${ingresosDelMes} + ' Bs.'"></p>
+                                        <h5>Ingresos Por Ventas</h5>
+                                        <p class="mb-0" id="ingresos-mes-ventas" th:text="${ventasDelMes} + ' Bs.'"></p>
 
-                            <!-- Contenedor del gráfico -->
-
-
-
-                            <!-- Contenedor del gráfico con desplazamiento horizontal -->
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-xl-10">
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <i class="fas fa-chart-area me-1"></i>
-                                                Ingresos
-                                            </div>
-                                            <div class="card-body">
-                                                <!-- Contenedor del gráfico con desplazamiento horizontal -->
-                                                <div class="chart-container">
-                                                    <canvas id="myAreaChart"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- JavaScript que maneja la carga del gráfico -->
-                            <script>
-                                // Obtener los datos del gráfico desde el servidor
-                                fetch('/ingresos/grafico')
-                                    .then(response => response.json())
-                                    .then(datos => {
-                                        // Ordenar las fechas de más antigua a más reciente
-                                        const fechas = Object.keys(datos).sort((a, b) => new Date(a) - new Date(b));
-                                        const montos = fechas.map(fecha => datos[fecha]); // Obtener los montos correspondientes a las fechas ordenadas
 
-                                        var ctx = document.getElementById("myAreaChart");
-                                        var myLineChart = new Chart(ctx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: fechas, // Las fechas ordenadas
-                                                datasets: [{
-                                                    label: "Ingresos",
-                                                    lineTension: 0.3,
-                                                    backgroundColor: "rgba(2,117,216,0.2)",
-                                                    borderColor: "rgba(2,117,216,1)",
-                                                    pointRadius: 5,
-                                                    pointBackgroundColor: "rgba(2,117,216,1)",
-                                                    pointBorderColor: "rgba(255,255,255,0.8)",
-                                                    pointHoverRadius: 5,
-                                                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                                    pointHitRadius: 50,
-                                                    pointBorderWidth: 2,
-                                                    data: montos, // Los montos correspondientes a las fechas ordenadas
-                                                }],
-                                            },
-                                            options: {
-                                                scales: {
-                                                    x: {
-                                                        type: 'category', // Tipo de escala 'category' para fechas
-                                                        labels: fechas, // Las fechas ordenadas
-                                                        ticks: {
-                                                            autoSkip: true, // Salta etiquetas para evitar superposición
-                                                            maxRotation: 45, // Rotar las etiquetas
-                                                            minRotation: 45 // Rotar las etiquetas
-                                                        },
-                                                        grid: {
-                                                            display: false // Desactivar líneas de la cuadrícula
-                                                        },
-                                                    },
-                                                    y: {
-                                                        ticks: {
-                                                            min: 0, // Establecer valor mínimo del eje Y
-                                                            max: Math.max(...montos) + 5000, // Ajustar el límite superior según los datos
-                                                            maxTicksLimit: 5, // Establecer el número máximo de marcas en el eje Y
-                                                        },
-                                                        grid: {
-                                                            color: "rgba(0, 0, 0, .125)", // Color de la cuadrícula
-                                                        }
-                                                    }
-                                                },
-                                                legend: {
-                                                    display: false // Ocultar la leyenda
-                                                }
-                                            }
-                                        });
-                                    })
-                                    .catch(error => console.error('Error al obtener los datos:', error));
-                            </script>
+                            <!-- Gastos del Mes -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">
+                                        <h5>Gastos del Mes</h5>
+                                        <p class="mb-0" id="gastos-mes" th:text="${gastosDelMes} + ' Bs.'"></p>
+                                        <h5>Gastos Por Compras</h5>
+                                        <p class="mb-0" id="gastos-mes-ventas" th:text="${comprasDelMes} + ' Bs.'"></p>
+
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ventas del Día -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">
+                                        <h5>Ventas del Día</h5>
+                                        <p class="mb-0" th:text="${ventasDelDia} + ' ventas'"></p>
+                                        <h5>Ingresos por Ventas del Día</h5>
+                                        <p class="mb-0" th:text="${ingresosVentasDelDia}+ ' Bs.'"></p>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stock Crítico -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">
+                                        <h5>Stock Crítico (1-5 unidades)</h5>
+                                        <p class="mb-0" th:text="${stockCritico} == 1 ? ${stockCritico} + ' producto' : ${stockCritico} + ' productos'"></p>
+                                        <h5>Sin Stock (agotados)</h5>
+                                        <p class="mb-0" th:text="${sinStock} == 1 ? ${sinStock} + ' producto' : ${sinStock} + ' productos'"></p>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">Ir al inventario</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
 
@@ -192,7 +150,7 @@
 
 
 
-
+                        <div class="row">
 
 
 
@@ -207,6 +165,52 @@
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
+
+
+
+
+
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <i class="fas fa-chart-area me-1"></i>
+                                                Ingresos y Ventas
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- Contenedor del selector -->
+                                                <div class="mb-4">
+                                                    <label for="anioSelector">Año</label>
+                                                    <select id="anioSelector" class="form-control">
+                                                        <!-- Las opciones de año se llenarán aquí -->
+                                                    </select>
+
+                                                    <label for="mesSelector" class="mt-2">Mes</label>
+                                                    <select id="mesSelector" class="form-control">
+                                                        <!-- Las opciones de mes se llenarán aquí -->
+                                                    </select>
+                                                </div>
+
+                                                <!-- Contenedor del gráfico -->
+                                                <div class="chart-container">
+                                                    <canvas id="myAreaChart"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script src="/js/graficaIngresosVentas.js">
+
+                            </script>
+
+
+
+
+
                         </div>
 
                     </div>
@@ -253,6 +257,15 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+
+
+
+
+
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     </body>
 </html>

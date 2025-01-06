@@ -2,6 +2,7 @@
 package com.inventario.inventario;
 
 import com.inventario.inventario.categoria.Categoria;
+import com.inventario.inventario.model.Categoria;
 import com.inventario.inventario.repository.CategoriaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
