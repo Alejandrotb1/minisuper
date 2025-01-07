@@ -20,7 +20,7 @@ public class IngresoService {
     @Autowired UsuarioServiceImpl usuarioService;
 
     public List<Ingreso> obtenerTodosLosIngresos() {
-        return ingresoRepository.findAll();
+        return ingresoRepository.findAllByOrderByIdDesc();
     }
 
     public Optional<Ingreso> obtenerIngresoPorId(Long id) {

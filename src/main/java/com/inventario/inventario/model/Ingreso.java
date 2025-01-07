@@ -2,7 +2,9 @@ package com.inventario.inventario.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @DiscriminatorValue("INGRESO")  // Valor discriminador para Ingreso

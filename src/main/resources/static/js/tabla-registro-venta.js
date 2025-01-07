@@ -74,6 +74,8 @@ function buscarClientePorNit() {
 
                         // Función para seleccionar una fila y poner su nombre en el campo de búsqueda
                         function seleccionarFila(row) {
+
+
                             // Obtener el stock del producto
                             var productStock = row.querySelector(".productoStock").value;
 
@@ -182,11 +184,98 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+//
+//function addProduct() {
+//
+//
+//    // Obtener los valores de los campos
+//
+//    const productId = document.getElementById("productId").value;
+//    const productCode = document.getElementById("productCode").value;
+//
+//
+//    if(productCode==""){
+//    alert("seleccione un producto")
+//    return;}
+//    const productName = document.getElementById("productNombre").value;
+//    const productQuantity = document.getElementById("quantity").value;
+//    const productPrice = document.getElementById("productPrice").value;
+//
+//    // Calcular el subtotal
+//    const subtotal = productQuantity * productPrice;
+//
+//    // Crear una nueva fila en la tabla de productos agregados
+//    const tableVenta = document.getElementById("addedProductsTable").getElementsByTagName('tbody')[0];
+//    const newRow = tableVenta.insertRow();
+//
+//    // Insertar celdas en la fila
+//    const cell1 = newRow.insertCell(0);
+//    const cell2 = newRow.insertCell(1);
+//    const cell3 = newRow.insertCell(2);
+//    const cell4 = newRow.insertCell(3);
+//    const cell5 = newRow.insertCell(4);
+//    const cell6 = newRow.insertCell(5);
+//
+//    // Asignar los valores a las celdas
+//    cell1.textContent = productCode;         //cambiara code luego
+//    cell2.textContent = productName;
+//    cell3.textContent = productQuantity;
+//    cell4.textContent = productPrice;
+//    cell5.textContent = subtotal;
+//    cell6.textContent = productId;
+//    cell6.style.display = "none";            // Oculta el ID
+//
+//    // Opcional: agrega el ID como un atributo de la fila
+//    newRow.setAttribute("data-id", productId);
+//
+//
+//
+//
+//    // document.getElementById("clientCiNit").value = productId;
+//
+//
+//    // limipiar
+//    document.getElementById("productId").value = "";
+//
+//    document.getElementById("productCode").value = "";
+//    document.getElementById("productNombre").value = "";
+//    document.getElementById("productPrice").value = "";
+//    document.getElementById("productStock").value = "";
+//    document.getElementById("quantity").value = 1;
+//    document.getElementById("productType").value = "";
+//
+//    // document.getElementById("clientName").value = document.getElementById("paymentMethod").value;
+//
+//
+//     // Eliminar la clase 'selected' de todas las filas si el campo está vacío
+//     var table = document.getElementById("productoTabla");
+//     var rows = table.getElementsByTagName("tr");
+//     for (var i = 0; i < rows.length; i++) {
+//         rows[i].classList.remove("selected"); // Eliminar la clase de selección
+//     }
+//
+//
+//     updateTotal();
+//
+//
+//}
+//
 
+
+
+
+
+//con boton
 function addProduct() {
     // Obtener los valores de los campos
     const productId = document.getElementById("productId").value;
     const productCode = document.getElementById("productCode").value;
+
+    if (productCode == "") {
+        alert("Seleccione un producto");
+        return;
+    }
+
     const productName = document.getElementById("productNombre").value;
     const productQuantity = document.getElementById("quantity").value;
     const productPrice = document.getElementById("productPrice").value;
@@ -205,28 +294,36 @@ function addProduct() {
     const cell4 = newRow.insertCell(3);
     const cell5 = newRow.insertCell(4);
     const cell6 = newRow.insertCell(5);
+    const cell7 = newRow.insertCell(6); // Celda para el botón de eliminación
 
     // Asignar los valores a las celdas
-    cell1.textContent = productCode;         //cambiara code luego
-    cell2.textContent = productName;
-    cell3.textContent = productQuantity;
-    cell4.textContent = productPrice;
-    cell5.textContent = subtotal;
-    cell6.textContent = productId;
-    cell6.style.display = "none";            // Oculta el ID
+    cell1.textContent = productCode; // Código del producto
+    cell2.textContent = productName; // Nombre del producto
+    cell3.textContent = productQuantity; // Cantidad
+    cell4.textContent = productPrice; // Precio
+    cell5.textContent = subtotal; // Subtotal
+    cell6.textContent = productId; // ID oculto
+    cell6.style.display = "none"; // Ocultar ID
 
-    // Opcional: agrega el ID como un atributo de la fila
-    newRow.setAttribute("data-id", productId);
+    // Crear un botón de eliminación con un ícono de "X roja"
+    const deleteButton = document.createElement("button");
+    deleteButton.innerHTML = "❌"; // Ícono de X roja
+    deleteButton.style.color = "red";
+    deleteButton.style.border = "none";
+    deleteButton.style.background = "transparent";
+    deleteButton.style.cursor = "pointer";
 
+    // Agregar un evento para eliminar la fila
+    deleteButton.addEventListener("click", function () {
+        tableVenta.deleteRow(newRow.rowIndex - 1); // Eliminar fila
+        updateTotal(); // Actualizar total después de eliminar
+    });
 
+    // Insertar el botón en la última celda
+    cell7.appendChild(deleteButton);
 
-
-    // document.getElementById("clientCiNit").value = productId;
-
-
-    // limipiar
+    // Limpiar los campos del formulario
     document.getElementById("productId").value = "";
-
     document.getElementById("productCode").value = "";
     document.getElementById("productNombre").value = "";
     document.getElementById("productPrice").value = "";
@@ -234,21 +331,21 @@ function addProduct() {
     document.getElementById("quantity").value = 1;
     document.getElementById("productType").value = "";
 
-    // document.getElementById("clientName").value = document.getElementById("paymentMethod").value;
+    // Eliminar la clase 'selected' de todas las filas si el campo está vacío
+    const table = document.getElementById("productoTabla");
+    const rows = table.getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].classList.remove("selected"); // Eliminar la clase de selección
+    }
 
-
-     // Eliminar la clase 'selected' de todas las filas si el campo está vacío
-     var table = document.getElementById("productoTabla");
-     var rows = table.getElementsByTagName("tr");
-     for (var i = 0; i < rows.length; i++) {
-         rows[i].classList.remove("selected"); // Eliminar la clase de selección
-     }
-     
-
-     updateTotal();
-
-     
+    updateTotal(); // Actualizar total
 }
+
+
+
+
+
+
 
 
 // Función para calcular y mostrar el total
@@ -374,7 +471,13 @@ function submitForm(event) {
             cantidad: parseInt(cells[2].textContent),
             precio_unitario: parseFloat(cells[3].textContent),
             subtotal: parseFloat(cells[4].textContent),
+
+
+
+
         });
+        console.log("fff");
+          console.log(productId);
     }
 
     const jsonData = { ingreso: ingreso, venta: venta };
@@ -386,17 +489,37 @@ function submitForm(event) {
     xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 
     // Manejo de la respuesta del servidor
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log("Datos enviados correctamente");
-                window.location.href = "http://localhost:8080/venta"; // Redirige solo si la respuesta fue exitosa
-            } else {
-                console.error("Error al enviar los datos");
-                alert("Hubo un error al guardar los datos. Inténtalo de nuevo.");
-            }
+//    xhr.onreadystatechange = function () {
+//        if (xhr.readyState === XMLHttpRequest.DONE) {
+//            if (xhr.status === 200) {
+//                console.log("Datos enviados correctamente");
+//                    alert("venta hecha")
+////                window.location.href = "http://localhost:8080/venta"; // Redirige solo si la respuesta fue exitosa
+//            } else {
+//                console.error("Error al enviar los datos");
+//                alert("Hubo un error al guardar los datos. Inténtalo de nuevo.");
+//            }
+//        }
+//    };
+
+
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+            // Respuesta exitosa
+            const responseMessage = xhr.responseText; // Mensaje enviado por el servidor
+            console.log("Datos enviados correctamente:", responseMessage);
+            alert("Venta hecha: " + responseMessage);
+            // Redirige si es necesario
+            window.location.href = "http://localhost:8080/venta";
+        } else {
+            // Manejo de errores
+            const errorMessage = xhr.responseText; // Mensaje de error del servidor
+            console.error("Error al enviar los datos:", errorMessage);
+            alert("Hubo un error al guardar los datos: " + errorMessage);
         }
-    };
+    }
+};
 
     xhr.send(JSON.stringify(jsonData));
 

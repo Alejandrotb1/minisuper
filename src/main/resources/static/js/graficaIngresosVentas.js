@@ -51,6 +51,8 @@
                                                     ],
                                                 },
                                                 options: {
+                                                responsive: true,
+//                                              maintainAspectRatio: false,
                                                     scales: {
                                                         x: {
                                                             type: 'category',
@@ -66,9 +68,9 @@
                                                         },
                                                         y: {
                                                             ticks: {
-                                                                min: 0,
-                                                                max: Math.max(...ingresos.concat(ventas)) + 5000,
-                                                                maxTicksLimit: 5,
+                                                                min: 5,
+                                                                max: Math.max(...ingresos.concat(ventas)) + 100,
+                                                                maxTicksLimit: 10,
                                                             },
                                                             grid: {
                                                                 color: "rgba(0, 0, 0, .125)",

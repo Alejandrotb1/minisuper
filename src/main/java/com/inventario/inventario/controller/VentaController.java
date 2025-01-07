@@ -11,6 +11,8 @@ import com.inventario.inventario.service.IngresoService;
 import com.inventario.inventario.service.VentaService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,22 +82,39 @@ public class VentaController {
 
 
 
+//    @PostMapping("/guardar")
+//    public String guardarIngresoConVentaYDetalles(@RequestBody VentaConIngresoDTO ventaConIngresoDTO,  @RequestHeader("X-CSRF-TOKEN") String csrfToken) {
+//
+////        System.out.println("token recibido: " + csrfToken);
+//
+//        if (ventaConIngresoDTO == null || ventaConIngresoDTO.getVenta() == null || ventaConIngresoDTO.getIngreso() == null) {
+//            return "error"; //error si falta algún dato
+//        }
+//
+//        ventaService.guardarIngresoConVentaYDetalles(ventaConIngresoDTO);
+//
+//
+//
+//
+//        return "redirect:/venta";
+//    }
+
+
     @PostMapping("/guardar")
-    public String guardarIngresoConVentaYDetalles(@RequestBody VentaConIngresoDTO ventaConIngresoDTO,  @RequestHeader("X-CSRF-TOKEN") String csrfToken) {
-
-//        System.out.println("token recibido: " + csrfToken);
-
+    public ResponseEntity<?> guardarIngresoConVentaYDetalles(@RequestBody VentaConIngresoDTO ventaConIngresoDTO, @RequestHeader("X-CSRF-TOKEN") String csrfToken) {
         if (ventaConIngresoDTO == null || ventaConIngresoDTO.getVenta() == null || ventaConIngresoDTO.getIngreso() == null) {
-            return "error"; //error si falta algún dato
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Faltan datos en la solicitud");
         }
 
-        ventaService.guardarIngresoConVentaYDetalles(ventaConIngresoDTO);
-
-
-
-
-        return "redirect:/venta";
+        try {
+            ventaService.guardarIngresoConVentaYDetalles(ventaConIngresoDTO);
+            return ResponseEntity.ok("Venta registrada exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la venta: " + e.getMessage());
+        }
     }
+
 
 
 

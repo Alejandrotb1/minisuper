@@ -51,8 +51,9 @@ public class IngresoSeeder implements CommandLineRunner {
         LocalDate endDate = LocalDate.of(2024, 11, 30);
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
 
-        // Insertar ingresos
-        for (int i = 0; i < 10; i++) {
+        // insertar ingresos
+        //i = cantidad de ingresos a insertar
+        for (int i = 0; i < 0; i++) {
             Ingreso ingreso = new Ingreso();
             ingreso.setUsuario(usuario);  // Asignar el usuario con id = 1
             ingreso.setMonto(BigDecimal.valueOf(faker.number().randomDouble(2, 100, 1000)));  // Monto aleatorio
